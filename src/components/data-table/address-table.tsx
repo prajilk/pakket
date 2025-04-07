@@ -14,9 +14,7 @@ import { Input } from "@heroui/input";
 import {
     ListFilter,
     Loader2,
-    MapPinHouse,
     PlusCircle,
-    RotateCw,
     SquareArrowOutUpRight,
 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -28,8 +26,6 @@ import {
     DropdownItem,
 } from "@heroui/dropdown";
 import { useDebounce } from "@/hooks/use-debounce";
-import getQueryClient from "@/lib/query-utils/get-query-client";
-import { AddressDocument } from "@/models/types/address";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
 import { useAddresses } from "@/api-hooks/addresses/get-addresses";
@@ -66,8 +62,6 @@ export default function AddressesTable() {
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
-
-    const queryClient = getQueryClient();
 
     const debounceSearch = useDebounce(filterValue, 500);
 
@@ -264,7 +258,7 @@ export default function AddressesTable() {
                 </Button>
             </div>
         );
-    }, [page, data?.hasMore]);
+    }, [page, data?.hasMore, isPlaceholderData]);
 
     return (
         <Table

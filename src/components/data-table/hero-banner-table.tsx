@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import {
     Table,
     TableHeader,
@@ -108,7 +108,7 @@ export default function HeroBannersTable() {
                     return cellValue;
             }
         },
-        []
+        [handleChecked, statusLoading]
     );
 
     const topContent = React.useMemo(() => {

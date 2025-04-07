@@ -47,7 +47,7 @@ export async function uploadFile(file: string, folder: string) {
             url: uploadResponse.secure_url,
             publicId: uploadResponse.public_id,
         };
-    } catch (error) {
+    } catch {
         return null;
     }
 }

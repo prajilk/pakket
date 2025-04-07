@@ -226,6 +226,7 @@ export default function CustomersTable() {
         data?.customers.length,
         onClear,
         visibleColumns,
+        queryClient,
     ]);
 
     const bottomContent = React.useMemo(() => {
@@ -249,7 +250,7 @@ export default function CustomersTable() {
                 </Button>
             </div>
         );
-    }, [page, data?.hasMore]);
+    }, [page, data?.hasMore, isPlaceholderData]);
 
     return (
         <Table

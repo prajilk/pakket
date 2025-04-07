@@ -75,17 +75,26 @@ async function getHandler(req: AuthenticatedAppRequest) {
                 totalPrice: order.totalPrice,
                 deliveryDate: order.deliveryDate,
                 orderedOn: order.createdAt,
-                items: order.items.map((item) => {
-                    return {
-                        item: item._id,
-                        option: item.item.options.find(
-                            (opt) =>
-                                opt._id.toString() === item.option.toString()
-                        ),
-                        quantity: item.quantity,
-                        priceAtOrder: item.priceAtOrder,
-                    };
-                }),
+                items: order.items.map(
+                    (item: {
+                        _id: string;
+                        item: { options: { _id: string }[] };
+                        option: string;
+                        quantity: number;
+                        priceAtOrder: number;
+                    }) => {
+                        return {
+                            item: item._id,
+                            option: item.item.options.find(
+                                (opt) =>
+                                    opt._id.toString() ===
+                                    item.option.toString()
+                            ),
+                            quantity: item.quantity,
+                            priceAtOrder: item.priceAtOrder,
+                        };
+                    }
+                ),
             };
         });
 

@@ -24,7 +24,20 @@ async function getHandler(req: AuthenticatedAppRequest) {
 
         if (!cart) return error404("Cart not found");
 
-        const items: any[] = [];
+        const items: {
+            itemId: string;
+            productId: string;
+            thumbnail: string;
+            title: string;
+            disabled: boolean;
+            option: {
+                _id: string;
+                unit: string;
+                basePrice: number;
+                offerPrice: number;
+            };
+            quantity: number;
+        }[] = [];
         let totalPrice = 0;
         // Create a map for quick lookup
         const productMap = new Map(

@@ -11,7 +11,7 @@ import {
     Selection,
 } from "@heroui/table";
 import { Input } from "@heroui/input";
-import { ListFilter, Loader2, Pencil, Plus, PlusCircle, X } from "lucide-react";
+import { ListFilter, Loader2, Pencil, Plus, PlusCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
@@ -303,7 +303,7 @@ export default function ProductsTable() {
                 </Button>
             </div>
         );
-    }, [page, data?.hasMore]);
+    }, [page, data?.hasMore, isPlaceholderData]);
 
     return (
         <Table

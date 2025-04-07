@@ -53,7 +53,7 @@ async function postHandler(req: AuthenticatedRequest) {
             return error500({ error: "Unable to upload thumbnail image" });
         }
 
-        let images: { url: string; publicId: string | null }[] = [];
+        const images: { url: string; publicId: string | null }[] = [];
 
         imageUrls?.forEach((url) => {
             if (url.startsWith("data:image/")) {
@@ -200,7 +200,7 @@ async function putHandler(req: AuthenticatedRequest) {
             return error500({ error: "Unable to upload thumbnail image" });
         }
 
-        let images: { url: string; publicId: string | null }[] = [];
+        const images: { url: string; publicId: string | null }[] = [];
 
         imageUrls?.forEach((url) => {
             if (url.startsWith("data:image/")) {

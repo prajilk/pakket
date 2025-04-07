@@ -326,6 +326,7 @@ export default function OrdersTable() {
             </div>
         );
     }, [
+        queryClient,
         statusFilter,
         filterValue,
         onSearchChange,
@@ -355,7 +356,7 @@ export default function OrdersTable() {
                 </Button>
             </div>
         );
-    }, [page, data?.hasMore]);
+    }, [page, data?.hasMore, isPlaceholderData]);
 
     return (
         <Table

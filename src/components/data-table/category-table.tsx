@@ -10,7 +10,7 @@ import {
     TableCell,
 } from "@heroui/table";
 import { Input } from "@heroui/input";
-import { ListFilter, Loader2, Pencil, Plus, X } from "lucide-react";
+import { ListFilter, Loader2, Pencil, Plus } from "lucide-react";
 import { useCategories } from "@/api-hooks/category/get-categories";
 import { Button } from "../ui/button";
 import { CategoryDocument } from "@/models/types/category";

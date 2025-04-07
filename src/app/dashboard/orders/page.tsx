@@ -1,5 +1,5 @@
 import OrdersTable from "@/components/data-table/order-table";
-import ServerWrapper from "@/components/server-wrapper";
+// import ServerWrapper from "@/components/server-wrapper";
 
 export default function OrdersPage() {
     return (

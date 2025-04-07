@@ -37,7 +37,7 @@ import { TagsInput } from "../ui/tags-input";
 import { Label } from "../ui/label";
 
 type ProductFormContentProps = {
-    form: UseFormReturn<z.infer<typeof ZodProductSchema>, any, undefined>;
+    form: UseFormReturn<z.infer<typeof ZodProductSchema>, unknown, undefined>;
     onSubmit: (data: z.infer<typeof ZodProductSchema>) => void;
     thumbnailPreview: string;
     setThumbnailPreview: (value: string) => void;

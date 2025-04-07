@@ -2,27 +2,12 @@
 
 import * as React from "react";
 import {
-    ArrowUpCircleIcon,
     BadgePercent,
-    BarChartIcon,
     BookText,
-    CameraIcon,
     ChevronRight,
-    ClipboardListIcon,
-    DatabaseIcon,
-    FileCodeIcon,
-    FileIcon,
-    FileTextIcon,
-    FolderIcon,
-    HelpCircleIcon,
     Home,
-    LayoutDashboardIcon,
-    ListIcon,
     Package,
-    SearchIcon,
-    SettingsIcon,
     Users,
-    UsersIcon,
 } from "lucide-react";
 import { NavUser } from "@/components/nav-user";
 import {
