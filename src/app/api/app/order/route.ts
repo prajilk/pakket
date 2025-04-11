@@ -39,6 +39,7 @@ async function postHandler(req: AuthenticatedAppRequest) {
             orderId: generateOrderId(),
             items,
             address: result.data.address,
+            note: result.data.note,
             user: req.user.id,
             totalPrice: Number((totalPrice + deliveryCharge).toFixed(2)),
             userName: user.name,

@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
 import { addMinutes } from "date-fns";
 import { OptionProps } from "@/models/types/product";
+import { parseISO, differenceInCalendarDays } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -25,4 +26,17 @@ export function convertToIST(dateString: Date | string) {
 
 export function findOptionById(options: OptionProps[], id: string) {
     return options.find((option) => option._id.toString() === id.toString());
+}
+
+/**
+ * Get number of days between two date strings (inclusive).
+ * @param fromStr - e.g. "2025-04-01"
+ * @param toStr - e.g. "2025-04-08"
+ * @returns number of days (inclusive)
+ */
+export function getDaysBetween(fromStr: string, toStr: string): number {
+    const from = parseISO(fromStr);
+    const to = parseISO(toStr);
+
+    return differenceInCalendarDays(to, from) + 1;
 }

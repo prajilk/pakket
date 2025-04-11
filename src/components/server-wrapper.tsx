@@ -12,8 +12,10 @@ const ServerWrapper = async ({
     queryKey,
 }: {
     children: React.ReactNode;
-    queryFn: QueryFunction<unknown, (string | number)[], never> | undefined;
-    queryKey: (string | number)[];
+    queryFn:
+        | QueryFunction<unknown, (string | number | string[])[], never>
+        | undefined;
+    queryKey: (string | number | string[])[];
 }) => {
     const queryClient = new QueryClient();
     queryClient.prefetchQuery({

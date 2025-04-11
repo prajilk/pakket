@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import queryConfig from "@/config/react-query.config";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ContextProvider } from "@/context/filter-context";
 
 export function Providers({ children }: { children: React.ReactNode }) {
     const [queryClient] = useState(
@@ -14,12 +15,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
     return (
         <SessionProvider>
-            <QueryClientProvider client={queryClient}>
-                {/* <HeroUIProvider> */}
-                {children}
-                {/* </HeroUIProvider>; */}
-                <ReactQueryDevtools initialIsOpen={false} />
-            </QueryClientProvider>
+            <ContextProvider>
+                <QueryClientProvider client={queryClient}>
+                    {/* <HeroUIProvider> */}
+                    {children}
+                    {/* </HeroUIProvider>; */}
+                    <ReactQueryDevtools initialIsOpen={false} />
+                </QueryClientProvider>
+            </ContextProvider>
         </SessionProvider>
     );
 }

@@ -5,6 +5,7 @@ import {
     BadgePercent,
     BookText,
     ChevronRight,
+    Clock,
     Home,
     Package,
     Users,
@@ -43,6 +44,11 @@ const data = {
             link: "/dashboard/orders",
             icon: <Package size={17} />,
             label: "Orders",
+        },
+        {
+            link: "/dashboard/orders/pending",
+            icon: <Clock size={17} />,
+            label: "Pending Orders",
         },
         {
             link: "/",

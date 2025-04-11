@@ -17,6 +17,7 @@ const statusColorMap: Record<
     pending: "default",
     ongoing: "secondary",
     delivered: "success",
+    cancelled: "destructive",
 };
 
 type OrderSummaryCardProps = {

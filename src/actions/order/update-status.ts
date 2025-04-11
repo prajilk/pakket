@@ -3,10 +3,11 @@
 import connectDB from "@/config/mongodb";
 import Order from "@/models/orderModel";
 import { revalidatePath } from "next/cache";
+import { handleOrderCancelled, handleOrderDelivered } from "./helper";
 
 export async function updateStatusAction(
     id: string,
-    status: "pending" | "ongoing" | "delivered"
+    status: "pending" | "ongoing" | "delivered" | "cancelled"
 ) {
     try {
         await connectDB();
@@ -29,7 +30,17 @@ export async function updateStatusAction(
             data.deliveryDate = null;
         }
 
-        await Order.updateOne({ _id: id }, { $set: data });
+        const updatedOrder = await Order.findByIdAndUpdate(
+            id,
+            { $set: data },
+            { new: true }
+        );
+
+        if (data.status === "delivered") {
+            await handleOrderDelivered(updatedOrder.user);
+        } else {
+            await handleOrderCancelled(updatedOrder.user);
+        }
 
         revalidatePath("/dashboard/orders");
 

@@ -35,24 +35,31 @@ export default function HeroBannersTable() {
 
     const queryClient = getQueryClient();
 
-    async function handleChecked(value: boolean, id: string) {
-        const promise = () =>
-            new Promise(async (resolve, reject) => {
-                const result = await disableHeroBannerAction(id, value);
-                setStatusLoading(false);
-                if (result.success) resolve(result);
-                else reject(result);
-            });
+    const handleChecked = React.useCallback(
+        async (value: boolean, id: string) => {
+            const promise = () =>
+                new Promise(async (resolve, reject) => {
+                    const result = await disableHeroBannerAction(id, value);
+                    setStatusLoading(false);
+                    if (result.success) resolve(result);
+                    else reject(result);
+                });
 
-        toast.promise(promise, {
-            loading: "Updating banner...",
-            success: () => {
-                queryClient.invalidateQueries({ queryKey: ["hero-banners"] });
-                return `Successfully ${value ? "disabled" : "enabled"} banner`;
-            },
-            error: () => "Failed to update banner",
-        });
-    }
+            toast.promise(promise, {
+                loading: "Updating banner...",
+                success: () => {
+                    queryClient.invalidateQueries({
+                        queryKey: ["hero-banners"],
+                    });
+                    return `Successfully ${
+                        value ? "disabled" : "enabled"
+                    } banner`;
+                },
+                error: () => "Failed to update banner",
+            });
+        },
+        [queryClient]
+    );
 
     const renderCell = React.useCallback(
         (banner: HeroBannerDocument, columnKey: React.Key) => {

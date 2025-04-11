@@ -26,7 +26,6 @@ export type OrderTableDocument = {
     orderId: string;
     user: string;
     address: string;
-    items: number;
     userName: string;
     userPhone: string;
     totalPrice: number;
@@ -34,6 +33,25 @@ export type OrderTableDocument = {
     isDeleted: boolean;
     status: string;
     createdAt: Date;
+};
+
+export type PendingOrderTableDocument = {
+    _id: string;
+    orderId: string;
+    items: {
+        title: string;
+        priceAtOrder: number;
+        quantity: number;
+        option: string;
+    }[];
+    note: string;
+    userName: string;
+    userPhone: string;
+    address: string;
+    location: string;
+    totalPrice: string;
+    status: string;
+    createdAt: string;
 };
 
 // Use Omit<> to avoid repetition and improve maintainability

@@ -11,7 +11,14 @@ import {
     Selection,
 } from "@heroui/table";
 import { Input } from "@heroui/input";
-import { Eye, ListFilter, Loader2, PlusCircle, RotateCw } from "lucide-react";
+import {
+    Eye,
+    ListFilter,
+    Loader2,
+    PlusCircle,
+    RotateCw,
+    X,
+} from "lucide-react";
 import { Button } from "../ui/button";
 import { Button as HeroButton } from "@heroui/button";
 import {
@@ -31,6 +38,7 @@ import Link from "next/link";
 import { VariantProps } from "class-variance-authority";
 import { deleteOrderAction } from "@/actions/order/delete-order";
 import UpdateStatus from "../order/update-status";
+import DateFilter from "../date-filter";
 
 const statusColorMap: Record<
     string,
@@ -39,6 +47,7 @@ const statusColorMap: Record<
     pending: "default",
     ongoing: "secondary",
     delivered: "success",
+    cancelled: "destructive",
 };
 
 export const columns = [
@@ -71,6 +80,7 @@ const statusOptions = [
     { name: "Pending", uid: "pending" },
     { name: "Ongoing", uid: "ongoing" },
     { name: "Delivered", uid: "delivered" },
+    { name: "Cancelled", uid: "cancelled" },
 ];
 
 export default function OrdersTable() {
@@ -80,7 +90,7 @@ export default function OrdersTable() {
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
-    // const [date, setDate] = React.useState<Date>(new Date());
+    const [selectedDate, setSelectedDate] = React.useState<Date | "all">("all");
 
     const queryClient = getQueryClient();
 
@@ -97,6 +107,7 @@ export default function OrdersTable() {
     const { data, status, isFetching, isPlaceholderData } = useOrders(
         page,
         statusKey,
+        selectedDate,
         debounceSearch
     );
 
@@ -152,10 +163,12 @@ export default function OrdersTable() {
                         "MMM d, yyyy hh:mm a"
                     );
                 case "deliveryDate":
-                    return format(
-                        new Date(order.deliveryDate),
-                        "MMM d, yyyy hh:mm a"
-                    );
+                    return order.deliveryDate
+                        ? format(
+                              new Date(order.deliveryDate),
+                              "MMM d, yyyy hh:mm a"
+                          )
+                        : "--";
                 case "actions":
                     return (
                         <div className="flex items-center justify-center gap-2.5">
@@ -287,11 +300,24 @@ export default function OrdersTable() {
                             ))}
                         </DropdownMenu>
                     </Dropdown>
-                    {/* <DateFilter
-                        date={date}
-                        onSelect={setDate}
+                    {/* Date Filter */}
+                    <DateFilter
+                        date={
+                            selectedDate === "all" ? new Date() : selectedDate
+                        }
+                        onSelect={setSelectedDate}
                         footer="Orders placed on"
-                    /> */}
+                    />
+                    {selectedDate !== "all" && (
+                        <Button
+                            size={"icon"}
+                            className="rounded-full"
+                            variant={"outline"}
+                            onClick={() => setSelectedDate("all")}
+                        >
+                            <X size={15} />
+                        </Button>
+                    )}
                     <div className="flex justify-end flex-1 gap-2">
                         {/* <Button
                             size={"sm"}
@@ -326,6 +352,7 @@ export default function OrdersTable() {
             </div>
         );
     }, [
+        selectedDate,
         queryClient,
         statusFilter,
         filterValue,
@@ -386,7 +413,7 @@ export default function OrdersTable() {
                 )}
             </TableHeader>
             <TableBody
-                emptyContent={"No customers found"}
+                emptyContent={"No orders found"}
                 items={data?.orders || []}
                 isLoading={isFetching || status === "pending"}
                 loadingContent={<Loader2 className="animate-spin" />}

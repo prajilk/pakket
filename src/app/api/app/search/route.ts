@@ -8,15 +8,15 @@ async function getHandler(req: AuthenticatedAppRequest) {
         if (!req.user) return error401("Unauthorized");
 
         const search = req.nextUrl.searchParams.get("q");
-        const limit = req.nextUrl.searchParams.get("limit") || 10;
-        const page = req.nextUrl.searchParams.get("page") || 1;
+        // const limit = req.nextUrl.searchParams.get("limit") || 10;
+        // const page = req.nextUrl.searchParams.get("page") || 1;
         if (!search) return success200({ result: [] });
 
         // Split query into words
         const keywords = search.split(" ");
 
         // Calculate skip (page number - 1) * limit
-        const skip = (Number(page) - 1) * Number(limit);
+        // const skip = (Number(page) - 1) * Number(limit);
 
         const products = await Product.find({
             $and: [
@@ -39,9 +39,9 @@ async function getHandler(req: AuthenticatedAppRequest) {
                 },
                 { disabled: false }, // Ensure disabled is false
             ],
-        })
-            .skip(skip)
-            .limit(Number(limit));
+        });
+        // .skip(skip)
+        // .limit(Number(limit));
 
         // Prioritize products with more matching keywords
         const rankedProducts = products

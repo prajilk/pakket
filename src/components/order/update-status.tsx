@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateStatusAction } from "@/actions/order/update-status";
 import { toast } from "sonner";
 import {
@@ -14,16 +14,22 @@ import {
 
 const UpdateStatus = ({ status, id }: { status: string; id: string }) => {
     const [loading, setLoading] = useState(false);
+    const [currentStatus, setCurrentStatus] = useState(status);
+
+    // Sync prop with local state if it changes externally
+    useEffect(() => {
+        setCurrentStatus(status);
+    }, [status]);
 
     const queryClient = useQueryClient();
 
     async function updateStatus(
         id: string,
-        status: "pending" | "ongoing" | "delivered"
+        newStatus: "pending" | "ongoing" | "delivered" | "cancelled"
     ) {
         const promise = () =>
             new Promise(async (resolve, reject) => {
-                const result = await updateStatusAction(id, status);
+                const result = await updateStatusAction(id, newStatus);
                 setLoading(false);
                 if (result.success) resolve(result);
                 else reject(result);
@@ -40,7 +46,7 @@ const UpdateStatus = ({ status, id }: { status: string; id: string }) => {
     }
     return (
         <Select
-            defaultValue={status}
+            value={currentStatus}
             onValueChange={(value) =>
                 updateStatus(id, value as "pending" | "ongoing" | "delivered")
             }
@@ -52,15 +58,19 @@ const UpdateStatus = ({ status, id }: { status: string; id: string }) => {
                 <SelectValue placeholder="Update status" />
             </SelectTrigger>
             <SelectContent>
-                {["pending", "ongoing", "delivered"].map((value) => (
-                    <SelectItem
-                        key={value}
-                        value={value}
-                        className="capitalize"
-                    >
-                        {value}
-                    </SelectItem>
-                ))}
+                {["pending", "ongoing", "delivered", "cancelled"].map(
+                    (value) => (
+                        <SelectItem
+                            key={value}
+                            value={value}
+                            className={`capitalize ${
+                                value === "cancelled" && "text-red-500"
+                            }`}
+                        >
+                            {value}
+                        </SelectItem>
+                    )
+                )}
             </SelectContent>
         </Select>
     );

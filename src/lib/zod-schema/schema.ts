@@ -102,5 +102,6 @@ export const ZodItemsSchema = z.object({
 
 export const ZodOrderSchema = z.object({
     address: z.string().length(24),
+    note: z.string().optional(),
     items: ZodItemsSchema.array(),
 });

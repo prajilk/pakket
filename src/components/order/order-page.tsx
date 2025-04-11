@@ -23,6 +23,8 @@ import ItemRow from "./item-row";
 import { findOptionById } from "@/lib/utils";
 import PaymentSummary from "./payment-summary";
 import UpdateStatus from "./update-status";
+import ApproveOrderDialog from "../dialog/approve-order-dialog";
+import { BadgeCheck } from "lucide-react";
 
 export default function OrderDetailsPage({
     order,
@@ -67,17 +69,26 @@ export default function OrderDetailsPage({
                 />
             </div>
 
-            {/* Address Information */}
-            <AddressCard
-                address={order.address.address}
-                addressId={order.address._id.toString()}
-                floor={order.address.floor}
-                landmark={order.address.landmark}
-                lat={order.address.lat}
-                lng={order.address.lng}
-                locality={order.address.locality}
-                isDeleted={order.address.isDeleted}
-            />
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {/* Address Information */}
+                <AddressCard
+                    address={order.address.address}
+                    addressId={order.address._id.toString()}
+                    floor={order.address.floor}
+                    landmark={order.address.landmark}
+                    lat={order.address.lat}
+                    lng={order.address.lng}
+                    locality={order.address.locality}
+                    isDeleted={order.address.isDeleted}
+                />
+
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Note</CardTitle>
+                    </CardHeader>
+                    <CardContent>{order.note}</CardContent>
+                </Card>
+            </div>
 
             {/* Order Items */}
             <Card>
@@ -146,12 +157,11 @@ export default function OrderDetailsPage({
                 <Button variant="outline" asChild>
                     <Link href="/dashboard/orders">Back to Orders</Link>
                 </Button>
-                <Button
-                    variant="destructive"
-                    disabled={order.status === "delivered"}
-                >
-                    Cancel Order
-                </Button>
+                <ApproveOrderDialog id={order._id.toString()}>
+                    <Button variant={"outline"}>
+                        <BadgeCheck className="text-green-500" /> Approve
+                    </Button>
+                </ApproveOrderDialog>
             </div>
         </div>
     );

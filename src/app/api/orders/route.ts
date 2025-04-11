@@ -10,8 +10,8 @@ async function getHandler(req: AuthenticatedRequest) {
         const statusFilter = req.nextUrl.searchParams
             .get("statusFilter")
             ?.split(",") || ["all"];
-
         const search = req.nextUrl.searchParams.get("search") || "";
+        const date = req.nextUrl.searchParams.get("date");
 
         // Escape special regex characters in search query
         const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -43,10 +43,25 @@ async function getHandler(req: AuthenticatedRequest) {
             ? {}
             : { status: { $in: statusFilter } };
 
+        let dateFilter = {};
+        if (date) {
+            const start = new Date(date);
+            const end = new Date(start);
+            end.setDate(start.getDate() + 1);
+
+            dateFilter = {
+                createdAt: {
+                    $gte: start,
+                    $lt: end,
+                },
+            };
+        }
+
         // Combine both filters
         const filter = {
             ...searchFilter,
             ...statusCondition, // Add status filtering only if it's not "all"
+            ...dateFilter,
         };
 
         // Pagination
@@ -77,6 +92,7 @@ async function getHandler(req: AuthenticatedRequest) {
             totalPrice: order.totalPrice,
             deliveryDate: order.deliveryDate,
             status: order.status,
+            note: order.note,
             isDeleted: order.isDeleted,
             createdAt: order.createdAt,
         }));

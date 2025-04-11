@@ -57,6 +57,7 @@ const OrderSchema = new Schema<OrderDocument>(
         },
         userName: String,
         userPhone: String,
+        note: String,
         isDeleted: {
             type: Boolean,
             required: true,

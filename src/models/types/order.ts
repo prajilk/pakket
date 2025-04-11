@@ -17,6 +17,7 @@ export interface OrderDocument {
     deliveryCharge: number;
     deliveryDate: Date | null;
     status: string;
+    note?: string;
     isDeleted: boolean;
     createdAt: Date;
 }
