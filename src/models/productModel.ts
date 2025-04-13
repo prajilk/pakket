@@ -55,6 +55,10 @@ const ProductSchema = new Schema<ProductDocument>(
                 },
             },
         ],
+        purchases: {
+            type: Number,
+            default: 0,
+        },
         tags: [{ type: String }],
         disabled: {
             type: Boolean,

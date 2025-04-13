@@ -22,6 +22,7 @@ export interface ProductDocument {
     }[];
     options: OptionProps[];
     description: string;
+    purchases: number;
     tags: string[];
     disabled: boolean;
 }

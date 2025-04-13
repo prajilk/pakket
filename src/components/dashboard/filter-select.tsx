@@ -6,10 +6,7 @@ import { useFilterContext } from "@/context/filter-context";
 
 const FilterSelect = () => {
     const { filter, setFilter } = useFilterContext();
-    function handleChange(values: {
-        range: DateRange;
-        rangeCompare?: DateRange;
-    }) {
+    function handleChange(values: { range: DateRange }) {
         setFilter({
             from: values.range.from || new Date(),
             to: values.range.to || new Date(),
@@ -18,7 +15,6 @@ const FilterSelect = () => {
 
     return (
         <DateRangePicker
-            showCompare={false}
             onUpdate={handleChange}
             initialDateFrom={filter.from}
             initialDateTo={filter.to}
