@@ -63,6 +63,8 @@ export async function updateCategoryAction(id: string, formData: FormData) {
         );
 
         revalidatePath("/dashboard/categories");
+        revalidatePath("/dashboard/products/add");
+        revalidatePath("/dashboard/products/edit");
 
         return { success: true };
     } catch (error) {

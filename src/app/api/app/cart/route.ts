@@ -75,6 +75,7 @@ async function getHandler(req: AuthenticatedAppRequest) {
                 option: selectedOption,
                 quantity: order.quantity,
             };
+
             if (!order.item.disabled) {
                 items.push(item);
                 totalPrice += price * parseInt(order.quantity.toString(), 10);

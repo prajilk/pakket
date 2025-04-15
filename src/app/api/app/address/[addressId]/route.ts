@@ -1,4 +1,10 @@
-import { error400, error401, error500, success200 } from "@/lib/response";
+import {
+    error400,
+    error401,
+    error404,
+    error500,
+    success200,
+} from "@/lib/response";
 import { AuthenticatedAppRequest } from "@/lib/types/auth-request";
 import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
 import { ZodAddressSchema } from "@/lib/zod-schema/schema";
@@ -18,6 +24,8 @@ async function getHandler(
             user: req.user.id,
             isDeleted: false,
         });
+
+        if (!address) return error404("Address not found");
 
         return success200({ address });
     } catch (error) {

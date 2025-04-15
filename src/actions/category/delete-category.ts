@@ -34,6 +34,8 @@ export async function deleteCategoryAction(id: string) {
         await Promise.all(filesToDelete);
 
         revalidatePath("/dashboard/categories");
+        revalidatePath("/dashboard/products/add");
+        revalidatePath("/dashboard/products/edit");
 
         return { success: true };
     } catch (error) {
