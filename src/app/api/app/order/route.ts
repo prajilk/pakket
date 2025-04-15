@@ -12,7 +12,6 @@ import Order from "@/models/orderModel";
 import User from "@/models/userModel";
 import { calculateTotalPrice } from "./helper";
 import { generateOrderId } from "@/lib/utils";
-import Product from "@/models/productModel";
 
 async function postHandler(req: AuthenticatedAppRequest) {
     try {
@@ -59,74 +58,13 @@ async function getHandler(req: AuthenticatedAppRequest) {
     try {
         if (!req.user) return error401("Unauthorized");
 
-        const orders = await Order.find({
-            user: req.user.id,
-            isDeleted: false,
-        }).populate({
-            path: "items.item",
-            model: Product,
-            select: "title thumbnail options",
-        });
-
-        const formattedOrders = orders.map((order) => {
-            return {
-                _id: order._id,
-                orderId: order.orderId,
-                status: order.status,
-                totalPrice: order.totalPrice,
-                deliveryDate: order.deliveryDate,
-                orderedOn: order.createdAt,
-                items: order.items.map(
-                    (item: {
-                        _id: string;
-                        item: { options: { _id: string }[] };
-                        option: string;
-                        quantity: number;
-                        priceAtOrder: number;
-                    }) => {
-                        return {
-                            item: item._id,
-                            option: item.item.options.find(
-                                (opt) =>
-                                    opt._id.toString() ===
-                                    item.option.toString()
-                            ),
-                            quantity: item.quantity,
-                            priceAtOrder: item.priceAtOrder,
-                        };
-                    }
-                ),
-            };
-        });
-
-        console.log(formattedOrders[0].items);
-
-        // Continue after UI is done
-
-        /*
-        {
-            _id: ObjectId,
-            orderId: String,
-            status: String,
-            totalPrice: Number,
-            deliveryDate: Date,
-            orderOn: Date,
-            items: [
-                {
-                    _id: ObjectId,
-                    title: String,
-                    thumbnail: String,
-                    option: {
-                        _id: ObjectId,
-                        unit: String,
-                        basePrice: Number,
-                        offerPrice: Number,
-                    },
-                    quantity: Number,
-                }
-            ]
-        }
-        */
+        const orders = await Order.find(
+            {
+                user: req.user.id,
+                isDeleted: false,
+            },
+            "orderId status"
+        );
 
         return success200({ orders: orders || [] });
     } catch (error) {

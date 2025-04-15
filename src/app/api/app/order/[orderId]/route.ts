@@ -23,11 +23,11 @@ async function getHandler(
                 model: Address,
                 select: "_id address locality lat lng floor landmark",
             })
-            .populate({
-                path: "user",
-                model: User,
-                select: "_id name phone email dob",
-            })
+            // .populate({
+            //     path: "user",
+            //     model: User,
+            //     select: "_id name phone email dob",
+            // })
             .populate({
                 path: "items.item",
                 model: Product,
@@ -48,7 +48,7 @@ async function getHandler(
                     _id: item.item._id,
                     thumbnail: item.item.thumbnail,
                     title: item.item.title,
-                    options: {
+                    option: {
                         _id: selectedOption._id,
                         unit: selectedOption.unit,
                         basePrice: selectedOption.basePrice,
@@ -58,12 +58,15 @@ async function getHandler(
                     priceAtOrder: item.priceAtOrder,
                 };
             }),
-            deliveryDate: convertToIST(order.deliveryDate),
+            deliveryDate: order.deliveryDate
+                ? convertToIST(order.deliveryDate)
+                : null,
             createdAt: convertToIST(order.createdAt),
             updatedAt: convertToIST(order.updatedAt),
         };
 
         delete formattedOrder.userName;
+        delete formattedOrder.user;
         delete formattedOrder.userPhone;
 
         return success200({ order: formattedOrder });
