@@ -4,6 +4,7 @@ import { error400, error500, success201 } from "@/lib/response";
 import { ZodUserSchema } from "@/lib/zod-schema/schema";
 import User from "@/models/userModel";
 import bcrypt from "bcryptjs";
+import { MongooseError } from "mongoose";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -36,8 +37,17 @@ export async function POST(req: NextRequest) {
                 error.message.startsWith(
                     "E11000 duplicate key error collection"
                 )
-            )
-                return error400("Phone number already exists.");
+            ) {
+                if (
+                    (error as { keyValue?: { phone?: string } }).keyValue?.phone
+                ) {
+                    return error400("Phone number already exists.");
+                } else if (
+                    (error as { keyValue?: { email?: string } }).keyValue?.email
+                ) {
+                    return error400("Email already exists.");
+                }
+            }
             return error500({ error: error.message });
         } else return error500({ error: "An unknown error occurred." });
     }
