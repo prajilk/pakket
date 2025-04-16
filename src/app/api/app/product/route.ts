@@ -28,7 +28,7 @@ async function getHandler(req: AuthenticatedAppRequest) {
             category !== "all-items" &&
             !mongoose.Types.ObjectId.isValid(category || "")
         ) {
-            return error400("Invalid category id");
+            return error400("Invalid category id", { products: [] });
         }
 
         const products = await Product.find(
