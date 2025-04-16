@@ -4,7 +4,6 @@ import { error400, error500, success201 } from "@/lib/response";
 import { ZodUserSchema } from "@/lib/zod-schema/schema";
 import User from "@/models/userModel";
 import bcrypt from "bcryptjs";
-import { MongooseError } from "mongoose";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
