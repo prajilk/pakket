@@ -19,7 +19,9 @@ async function getHandler(req: AuthenticatedAppRequest) {
             disabled: boolean;
         } = { disabled: false };
 
-        if (category) filter = { ...filter, category };
+        if (category && category !== "all-items") {
+            filter = { ...filter, category };
+        }
 
         const products = await Product.find(
             filter,

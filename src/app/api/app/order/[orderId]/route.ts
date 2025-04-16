@@ -6,7 +6,6 @@ import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
 import Address from "@/models/addressModel";
 import Order from "@/models/orderModel";
 import Product from "@/models/productModel";
-import User from "@/models/userModel";
 
 async function getHandler(
     req: AuthenticatedAppRequest,
