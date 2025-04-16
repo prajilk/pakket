@@ -1,7 +1,8 @@
-import { error401, error500, success200 } from "@/lib/response";
+import { error400, error401, error500, success200 } from "@/lib/response";
 import { AuthenticatedAppRequest } from "@/lib/types/auth-request";
 import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
 import Product from "@/models/productModel";
+import mongoose from "mongoose";
 
 async function getHandler(req: AuthenticatedAppRequest) {
     try {
@@ -21,6 +22,13 @@ async function getHandler(req: AuthenticatedAppRequest) {
 
         if (category && category !== "all-items") {
             filter = { ...filter, category };
+        }
+
+        if (
+            category !== "all-items" &&
+            !mongoose.Types.ObjectId.isValid(category || "")
+        ) {
+            return error400("Invalid category id");
         }
 
         const products = await Product.find(
