@@ -31,6 +31,7 @@ export function withDbConnectAndAppAuth(
             console.error("Middleware Error:", error);
             return error500({
                 message: "Unauthorized or Internal Server Error",
+                token_expired: true,
             });
         }
     };

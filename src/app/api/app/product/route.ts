@@ -10,7 +10,8 @@ async function getHandler(req: AuthenticatedAppRequest) {
 
         // const limit = req.nextUrl.searchParams.get("limit") || 10;
         // const page = req.nextUrl.searchParams.get("page") || 1;
-        const category = req.nextUrl.searchParams.get("category");
+        const category =
+            req.nextUrl.searchParams.get("category") || "all-items";
 
         // Calculate skip (page number - 1) * limit
         // const skip = (Number(page) - 1) * Number(limit);
