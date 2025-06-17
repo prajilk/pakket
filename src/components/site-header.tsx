@@ -49,7 +49,7 @@ export function SiteHeader() {
                         ))}
                         <BreadcrumbItem>
                             <BreadcrumbPage className="capitalize">
-                                {paths[paths.length - 1]}
+                                {paths[paths.length - 1].split("-").join(" ")}
                             </BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>

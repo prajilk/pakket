@@ -19,6 +19,9 @@ import KPICardSkeleton from "../skeletons/kpi-card";
 
 const KPICards = () => {
     const { filter } = useFilterContext();
+
+    console.log(filter, "<== Filter");
+
     const { data, isPending } = useKpiStats(
         format(filter.from, "yyyy-MM-dd"),
         format(filter.to, "yyyy-MM-dd")

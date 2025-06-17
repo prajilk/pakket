@@ -14,7 +14,6 @@ export const ZodUserSchema = z.object({
     password: z.string().min(8, "Password must be 8 or more characters long"),
     phone: z.string().regex(phoneRegex, "Invalid Number!"),
     email: z.string().email({ message: "Invalid email" }),
-    dob: z.coerce.date(),
 });
 
 export const ZodAddressSchema = z.object({

@@ -33,7 +33,6 @@ export const columns = [
     { name: "NAME", uid: "name" },
     { name: "PHONE", uid: "phone" },
     { name: "EMAIL", uid: "email" },
-    { name: "DOB", uid: "dob" },
     { name: "ACCOUNT CREATED", uid: "createdAt" },
     { name: "ACTIONS", uid: "actions" },
 ];
@@ -42,7 +41,6 @@ const INITIAL_VISIBLE_COLUMNS = [
     "name",
     "phone",
     "email",
-    "dob",
     "createdAt",
     "actions",
 ];
@@ -79,13 +77,11 @@ export default function CustomersTable() {
                 case "name":
                     return (
                         <span className="whitespace-nowrap">
-                            {cellValue.toString()}
+                            {cellValue?.toString()}
                         </span>
                     );
-                case "dob":
-                    return format(new Date(cellValue), "dd/MM/yyyy");
                 case "createdAt":
-                    return format(new Date(cellValue), "PPP");
+                    return format(new Date(cellValue || ""), "PPP");
                 case "actions":
                     return (
                         <div className="flex gap-2.5 items-center justify-center">

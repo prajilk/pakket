@@ -9,6 +9,7 @@ import {
     Home,
     Package,
     Users,
+    Truck,
 } from "lucide-react";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -84,6 +85,11 @@ const data = {
             link: "/dashboard/offers",
             icon: <BadgePercent size={17} />,
             label: "Best Deals & Offers",
+        },
+        {
+            link: "/dashboard/delivery-zones",
+            icon: <Truck size={17} />,
+            label: "Delivery Zones",
         },
     ],
 };

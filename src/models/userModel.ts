@@ -23,9 +23,11 @@ const UserSchema = new Schema<UserDocument>(
             type: String,
             required: true,
         },
-        dob: {
+        otp: {
+            type: String,
+        },
+        otpExpires: {
             type: Date,
-            required: true,
         },
     },
     { versionKey: false, timestamps: true }

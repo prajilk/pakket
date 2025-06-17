@@ -433,7 +433,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                             onClick={() => {
                                 setIsOpen(false);
                                 if (
-                                    !areRangesEqual(
+                                    areRangesEqual(
                                         range,
                                         openedRangeRef.current
                                     )

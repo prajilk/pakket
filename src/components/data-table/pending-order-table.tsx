@@ -49,8 +49,9 @@ export default function PendingOrdersTable({ limit = 0, showViewAll = true }) {
     const { data: orders, isPending } = usePendingOrders(limit);
 
     function handleCopyOrder(order: PendingOrderTableDocument) {
+        toast.success(order.userPhone);
         navigator.clipboard.writeText(`
-            📦 *New Delivery Assigned*
+📦 *New Delivery Assigned*
 
 🧾 *Order ID:* #${order.orderId}
 👤 *Customer:* ${order.userName}
@@ -72,7 +73,7 @@ ${order.items
 📌 *Notes:* ${order.note}
 
 Please confirm once delivered ✅
-        `);
+`);
         toast.success("Order copied to clipboard");
     }
 

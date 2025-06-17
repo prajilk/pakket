@@ -53,6 +53,7 @@ async function getHandler(req: AuthenticatedRequest) {
                 orderId: order.orderId,
                 items,
                 userName: order.userName,
+                userPhone: order.userPhone,
                 note: order.note,
                 address: formatAddress(order.address),
                 location: `https://www.google.com/maps/dir/?api=1&destination=${order.address.lat},${order.address.lng}`,
