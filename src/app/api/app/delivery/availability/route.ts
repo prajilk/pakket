@@ -1,43 +1,66 @@
 import { error400, error401, error500, success200 } from "@/lib/response";
 import { AuthenticatedAppRequest } from "@/lib/types/auth-request";
 import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
-import DeliveryZone from "@/models/deliveryZoneModel";
+import { checkIfDeliverable } from "./helper";
 
 async function postHandler(req: AuthenticatedAppRequest) {
     try {
         if (!req.user) return error401("Unauthorized");
 
         const data = await req.json();
-        if (!data?.lat || !data?.lng) {
-            return error400("Invalid data");
-        }
 
-        const addressData = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${data.lat}&lon=${data.lng}&format=json`
-        );
-        const address = await addressData.json();
-        const postcode = address?.address?.postcode;
+        if (data.lat && data.lng) {
+            //  Process for coordinates
+            const isDeliverable = await checkIfDeliverable(data.lat, data.lng);
 
-        if (!address.address || !postcode) {
-            return error400("Unable to find postcode!");
-        }
+            if (!isDeliverable) {
+                return success200({
+                    message: "This postcode is not deliverable!",
+                    isDeliverable,
+                });
+            }
 
-        const deliveryZones = await DeliveryZone.find({});
-        const isDeliverable = deliveryZones.some(
-            (zone) => zone.postcode === postcode
-        );
-
-        if (!isDeliverable) {
             return success200({
-                message: "This postcode is not deliverable!",
+                message: "This postcode is deliverable!",
                 isDeliverable,
             });
-        }
+        } else if (data.mapUrl) {
+            // Step 1: Expand the shortened URL
+            const response = await fetch(data.mapUrl, { redirect: "manual" });
+            const longUrl = response.headers.get("Location");
 
-        return success200({
-            message: "This postcode is deliverable!",
-            isDeliverable,
-        });
+            if (!longUrl) {
+                return error400("Unable to expand the URL.");
+            }
+
+            // Step 2: Extract coordinates from the expanded URL
+            const match = longUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); // Example regex for @lat,lng format
+
+            if (match && match.length >= 3) {
+                const latitude = parseFloat(match[1]);
+                const longitude = parseFloat(match[2]);
+                const isDeliverable = await checkIfDeliverable(
+                    latitude.toString(),
+                    longitude.toString()
+                );
+
+                if (!isDeliverable) {
+                    return success200({
+                        message: "This postcode is not deliverable!",
+                        isDeliverable,
+                    });
+                }
+
+                return success200({
+                    message: "This postcode is deliverable!",
+                    isDeliverable,
+                });
+            } else {
+                return error400("Unable to find coordinates in the URL.");
+            }
+        } else {
+            return error400("Invalid request data.");
+        }
     } catch (error) {
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
