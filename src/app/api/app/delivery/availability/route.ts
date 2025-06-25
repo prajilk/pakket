@@ -26,12 +26,10 @@ async function postHandler(req: AuthenticatedAppRequest) {
             });
         } else if (data.mapUrl) {
             // Step 1: Expand the shortened URL
-            // const response = await fetch(data.mapUrl, { redirect: "manual" });
-            // const longUrl = response.headers.get("Location");
-            const response = await fetch(data.mapUrl); // Let it follow redirects
-            const longUrl = response.url;
-
-            console.log(longUrl, "<=== Long url");
+            const response = await fetch(data.mapUrl, { redirect: "manual" });
+            const longUrl = response.headers.get("Location");
+            // const response = await fetch(data.mapUrl); // Let it follow redirects
+            // const longUrl = response.url;
 
             if (!longUrl) {
                 return error400("Unable to expand the URL.");
