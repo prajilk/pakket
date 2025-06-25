@@ -11,12 +11,9 @@ export async function checkIfDeliverable(lat: string, lng: string) {
                 },
             }
         );
-        console.log(addressData, "<== addressData");
         const address = await addressData.json();
-        console.log(address, "<== address");
         const postcode = address?.address?.postcode;
 
-        console.log(postcode, "<== postcode");
         if (!address.address || !postcode) {
             return false;
         }

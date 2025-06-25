@@ -11,6 +11,7 @@ import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
 import { ZodItemsSchema } from "@/lib/zod-schema/schema";
 import Cart from "@/models/cartModel";
 import Product from "@/models/productModel";
+import { OptionProps } from "@/models/types/product";
 
 type Item = { item: string; option: string; quantity: number };
 
@@ -118,6 +119,19 @@ async function postHandler(req: AuthenticatedAppRequest) {
                 await cart.save();
                 return success200({ cart });
             }
+        }
+
+        // Validate item
+        const item = await Product.findOne({ _id: result.data.item });
+        if (!item) {
+            return error404("Item not found");
+        }
+        if (
+            item.options.findIndex(
+                (opt: OptionProps) => opt._id.toString() === result.data.option
+            ) === -1
+        ) {
+            return error404("Option not found");
         }
 
         // If no cart or item not found, push the new item (upsert: create cart if not exist)
