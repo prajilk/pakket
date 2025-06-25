@@ -33,14 +33,14 @@ export default function OrderDetailsPage({
 }) {
     return (
         <div className="space-y-5">
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between items-center">
                 <div>
                     <h1 className="text-2xl font-semibold">Order Details</h1>
                     <p className="text-muted-foreground">
                         Order ID: {order.orderId}
                     </p>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex gap-2 items-center">
                     <span className="text-xs whitespace-nowrap text-muted-foreground">
                         Update Status
                     </span>
@@ -78,6 +78,7 @@ export default function OrderDetailsPage({
                     landmark={order.address.landmark}
                     lat={order.address.lat}
                     lng={order.address.lng}
+                    mapUrl={order.address.mapUrl}
                     locality={order.address.locality}
                     isDeleted={order.address.isDeleted}
                 />
@@ -153,7 +154,7 @@ export default function OrderDetailsPage({
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-2">
+            <div className="flex gap-2 justify-end">
                 <Button variant="outline" asChild>
                     <Link href="/dashboard/orders">Back to Orders</Link>
                 </Button>

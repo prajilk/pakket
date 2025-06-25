@@ -164,9 +164,9 @@ Please confirm once delivered ✅
                 wrapper: "max-h-[382px] scrollbar-none border shadow-md px-3",
             }}
             topContent={
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <h1 className="text-lg font-medium">Pending Orders</h1>
-                    <div className="flex items-center gap-2">
+                    <div className="flex gap-2 items-center">
                         <ApproveOrderDialog id="all">
                             <Button size={"sm"} variant={"outline"}>
                                 <BadgeCheck className="text-green-500" />

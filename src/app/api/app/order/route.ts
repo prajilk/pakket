@@ -1,6 +1,7 @@
 import {
     error400,
     error401,
+    error404,
     error500,
     success200,
     success201,
@@ -12,6 +13,8 @@ import Order from "@/models/orderModel";
 import User from "@/models/userModel";
 import { calculateTotalPrice } from "./helper";
 import { generateOrderId } from "@/lib/utils";
+import Cart from "@/models/cartModel";
+import Address from "@/models/addressModel";
 
 async function postHandler(req: AuthenticatedAppRequest) {
     try {
@@ -26,6 +29,14 @@ async function postHandler(req: AuthenticatedAppRequest) {
         }
 
         const user = await User.findOne({ _id: req.user.id });
+        if (!user) return error404("User not found");
+        const address = await Address.findOne({
+            user: req.user.id,
+            _id: result.data.address,
+            isDeleted: false,
+        });
+
+        if (!address) return error404("Address not found");
 
         // Calculate total price
         const { totalPrice, items } = await calculateTotalPrice(
@@ -45,6 +56,11 @@ async function postHandler(req: AuthenticatedAppRequest) {
             userPhone: user.phone,
             deliveryCharge,
         });
+
+        await Cart.findOneAndUpdate(
+            { user: req.user.id },
+            { $set: { items: [] } }
+        );
 
         return success201({ order });
     } catch (error) {

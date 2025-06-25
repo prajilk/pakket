@@ -22,6 +22,12 @@ async function postHandler(req: AuthenticatedAppRequest) {
             });
         }
 
+        if ((!result.data.lat || !result.data.lng) && !result.data.mapUrl) {
+            return error400("Invalid request body", {
+                error: ["Latitude and longitude or mapUrl is required"],
+            });
+        }
+
         const address = await Address.create({
             ...result.data,
             user: req.user.id,

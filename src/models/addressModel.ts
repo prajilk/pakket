@@ -18,11 +18,12 @@ const AddressSchema = new Schema<AddressDocument>(
         },
         lat: {
             type: Number,
-            required: true,
         },
         lng: {
             type: Number,
-            required: true,
+        },
+        mapUrl: {
+            type: String,
         },
         floor: {
             type: String,

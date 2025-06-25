@@ -9,7 +9,7 @@ async function getHandler(req: AuthenticatedAppRequest) {
 
         const category = await Category.find({ disabled: false });
 
-        return success200({ categories: category });
+        return success200({ categories: category.reverse() });
     } catch (error) {
         console.log(error);
         if (error instanceof Error) {

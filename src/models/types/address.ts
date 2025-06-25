@@ -5,8 +5,9 @@ export interface AddressDocument {
     user: mongoose.Types.ObjectId;
     address: string;
     locality: string;
-    lat: number;
-    lng: number;
+    lat?: number;
+    lng?: number;
+    mapUrl?: string;
     floor?: string;
     landmark?: string;
     isDeleted: boolean;

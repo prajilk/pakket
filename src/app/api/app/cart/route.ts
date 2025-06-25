@@ -12,6 +12,8 @@ import { ZodItemsSchema } from "@/lib/zod-schema/schema";
 import Cart from "@/models/cartModel";
 import Product from "@/models/productModel";
 
+type Item = { item: string; option: string; quantity: number };
+
 async function getHandler(req: AuthenticatedAppRequest) {
     try {
         if (!req.user) return error401("Unauthorized");
@@ -102,13 +104,30 @@ async function postHandler(req: AuthenticatedAppRequest) {
             });
         }
 
-        const cart = await Cart.findOneAndUpdate(
+        const cart = await Cart.findOne({ user: req.user.id });
+
+        if (cart) {
+            const index = cart.items.findIndex(
+                (item: Item) =>
+                    item.item.toString() === result.data.item &&
+                    item.option.toString() === result.data.option
+            );
+
+            if (index !== -1) {
+                cart.items[index].quantity += result.data.quantity;
+                await cart.save();
+                return success200({ cart });
+            }
+        }
+
+        // If no cart or item not found, push the new item (upsert: create cart if not exist)
+        const updatedCart = await Cart.findOneAndUpdate(
             { user: req.user.id },
             { $push: { items: result.data } },
             { upsert: true, new: true }
         );
 
-        return success200({ cart });
+        return success200({ cart: updatedCart });
     } catch (error) {
         console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
@@ -123,21 +142,39 @@ async function patchHandler(req: AuthenticatedAppRequest) {
         const { itemId, operation } = await req.json();
         if (!itemId) return error400("Invalid item ID");
 
-        if (!operation && operation !== "inc" && operation !== "dec")
+        if (operation !== "inc" && operation !== "dec")
             return error400("Invalid operation");
 
-        await Cart.findOneAndUpdate(
-            { user: req.user.id, "items._id": itemId }, // Find cart where the item exists
+        const quantityChange = operation === "inc" ? 1 : -1;
+
+        await Cart.bulkWrite([
             {
-                $inc: { "items.$.quantity": operation === "inc" ? 1 : -1 }, // Update quantity of the matching item
-            }
-        );
+                updateOne: {
+                    filter: { user: req.user.id, "items._id": itemId },
+                    update: { $inc: { "items.$.quantity": quantityChange } },
+                },
+            },
+            {
+                updateOne: {
+                    filter: { user: req.user.id },
+                    update: {
+                        $pull: {
+                            items: { _id: itemId, quantity: { $lte: 0 } },
+                        },
+                    },
+                },
+            },
+        ]);
 
         return success200({});
     } catch (error) {
         console.log(error);
-        if (error instanceof Error) return error500({ error: error.message });
-        else return error500({ error: "An unknown error occurred." });
+        return error500({
+            error:
+                error instanceof Error
+                    ? error.message
+                    : "An unknown error occurred.",
+        });
     }
 }
 

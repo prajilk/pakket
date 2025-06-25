@@ -23,10 +23,19 @@ export const ZodAddressSchema = z.object({
         .min(1, { message: "Invalid locality" }),
     lat: z.coerce
         .number({ message: "Latitude is required" })
-        .positive({ message: "Invalid latitude" }),
+        .positive({ message: "Invalid latitude" })
+        .nullable()
+        .optional(),
     lng: z.coerce
         .number({ message: "Longitude is required" })
-        .positive({ message: "Invalid longitude" }),
+        .positive({ message: "Invalid longitude" })
+        .nullable()
+        .optional(),
+    mapUrl: z
+        .string()
+        .url({ message: "Invalid map URL" })
+        .nullable()
+        .optional(),
     floor: z.string({ message: "Floor: Expected string" }).optional(),
     landmark: z.string({ message: "Landmark: Expected string" }).optional(),
 });
@@ -102,5 +111,5 @@ export const ZodItemsSchema = z.object({
 export const ZodOrderSchema = z.object({
     address: z.string().length(24),
     note: z.string().optional(),
-    items: ZodItemsSchema.array(),
+    items: ZodItemsSchema.array().min(1, { message: "Add at least one item" }),
 });
