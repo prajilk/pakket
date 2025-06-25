@@ -1,5 +1,6 @@
 import connectDB from "@/config/mongodb";
 import { error400, error401, error500, success200 } from "@/lib/response";
+import { sentForgotPasswordCose } from "@/lib/utils";
 import { ZodUserSchema } from "@/lib/zod-schema/schema";
 import User from "@/models/userModel";
 import { NextRequest } from "next/server";
@@ -24,10 +25,15 @@ export async function POST(req: NextRequest) {
         }
 
         validUser.otp = Math.floor(Math.random() * 1000000);
-        validUser.otpExpires = new Date(Date.now() + 2 * 60 * 1000);
+        validUser.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
         await validUser.save();
 
         // Send OTP to user's phone number through WhatsApp.
+        const res = await sentForgotPasswordCose(
+            result.data.phone,
+            validUser.otp
+        );
+        if (!res) return error400("Failed to send OTP");
 
         return success200({ message: "OTP sent successfully" });
     } catch (error) {

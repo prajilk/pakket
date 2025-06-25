@@ -20,6 +20,8 @@ export async function calculateTotalPrice(
     // Fetch product details from MongoDB
     const products = await Product.find({ _id: { $in: productIds } });
 
+    if (products.length === 0) return { totalPrice: 0, items: [] };
+
     // Create a map for quick lookup
     const productMap = new Map(products.map((p) => [p._id.toString(), p]));
 
@@ -31,7 +33,9 @@ export async function calculateTotalPrice(
         const selectedOption = product.options.find(
             (opt: { _id: string }) => opt._id.toString() === order.option
         );
-        if (!selectedOption) continue; // Skip if option is not found
+        if (!selectedOption) {
+            return { totalPrice: 0, items: [order.item], optionError: true };
+        } // Return if option is not found
 
         // Use offerPrice if available, otherwise basePrice
         const price =

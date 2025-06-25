@@ -40,3 +40,27 @@ export function getDaysBetween(fromStr: string, toStr: string): number {
 
     return differenceInCalendarDays(to, from) + 1;
 }
+
+export async function sentForgotPasswordCose(phone: string, value: string) {
+    const response = await fetch(
+        "https://adminapis.backendprod.com/lms_campaign/api/whatsapp/template/zw70gxuh82/process",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                receiver: phone,
+                values: {
+                    "1": value,
+                },
+            }),
+        }
+    );
+    const data = await response.json();
+    if (data.messages[0].message_status === "accepted") {
+        return true;
+    } else {
+        return false;
+    }
+}

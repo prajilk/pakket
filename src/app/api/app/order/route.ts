@@ -28,6 +28,8 @@ async function postHandler(req: AuthenticatedAppRequest) {
             });
         }
 
+        if (result.data.items.length === 0) return error400("No items in cart");
+
         const user = await User.findOne({ _id: req.user.id });
         if (!user) return error404("User not found");
         const address = await Address.findOne({
@@ -39,9 +41,13 @@ async function postHandler(req: AuthenticatedAppRequest) {
         if (!address) return error404("Address not found");
 
         // Calculate total price
-        const { totalPrice, items } = await calculateTotalPrice(
+        const { totalPrice, items, optionError } = await calculateTotalPrice(
             result.data.items
         );
+
+        if (optionError)
+            return error400("Invalid product option ID for item: " + items[0]);
+        if (items.length === 0) return error400("Invalid product ID");
 
         const deliveryCharge = 0;
 
