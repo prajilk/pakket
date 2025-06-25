@@ -5,8 +5,7 @@ export async function checkIfDeliverable(lat: string, lng: string) {
         const addressData = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
         );
-        console.log(addressData.url, "<== addressData");
-
+        console.log(addressData, "<== addressData");
         const address = await addressData.json();
         console.log(address, "<== address");
         const postcode = address?.address?.postcode;
