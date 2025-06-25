@@ -1,9 +1,16 @@
 import DeliveryZone from "@/models/deliveryZoneModel";
+import { m } from "framer-motion";
 
 export async function checkIfDeliverable(lat: string, lng: string) {
     try {
         const addressData = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+            `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
+            {
+                headers: {
+                    "User-Agent": "Pakket/1.0 (pakketonlinestore@hotmail.com)",
+                    Accept: "application/json",
+                },
+            }
         );
         console.log(addressData, "<== addressData");
         const address = await addressData.json();
