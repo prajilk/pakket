@@ -1,5 +1,4 @@
 import DeliveryZone from "@/models/deliveryZoneModel";
-import { m } from "framer-motion";
 
 export async function checkIfDeliverable(lat: string, lng: string) {
     try {
