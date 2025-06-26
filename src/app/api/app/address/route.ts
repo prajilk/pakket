@@ -9,6 +9,7 @@ import { AuthenticatedAppRequest } from "@/lib/types/auth-request";
 import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
 import { ZodAddressSchema } from "@/lib/zod-schema/schema";
 import Address from "@/models/addressModel";
+import { checkIfDeliverable } from "../delivery/availability/helper";
 
 async function postHandler(req: AuthenticatedAppRequest) {
     try {
@@ -26,6 +27,17 @@ async function postHandler(req: AuthenticatedAppRequest) {
             return error400("Invalid request body", {
                 error: ["Latitude and longitude or mapUrl is required"],
             });
+        }
+
+        if (result.data.lat && result.data.lng) {
+            const isDeliverable = await checkIfDeliverable(data.lat, data.lng);
+
+            if (!isDeliverable) {
+                return success200({
+                    message: "This postcode is not deliverable!",
+                    isDeliverable,
+                });
+            }
         }
 
         const address = await Address.create({
