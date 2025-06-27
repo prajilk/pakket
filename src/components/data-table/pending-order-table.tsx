@@ -167,12 +167,6 @@ Please confirm once delivered ✅
                 <div className="flex justify-between items-center">
                     <h1 className="text-lg font-medium">Pending Orders</h1>
                     <div className="flex gap-2 items-center">
-                        <ApproveOrderDialog id="all">
-                            <Button size={"sm"} variant={"outline"}>
-                                <BadgeCheck className="text-green-500" />
-                                Approve all for delivery
-                            </Button>
-                        </ApproveOrderDialog>
                         <Show>
                             <Show.When isTrue={showViewAll}>
                                 <Link href="/dashboard/orders/pending">

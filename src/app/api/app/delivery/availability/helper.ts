@@ -25,7 +25,6 @@ export async function checkIfDeliverable(lat: string, lng: string) {
 
         return isDeliverable;
     } catch (error) {
-        console.log(error);
         return false;
     }
 }

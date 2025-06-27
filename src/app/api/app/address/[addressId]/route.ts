@@ -29,7 +29,6 @@ async function getHandler(
 
         return success200({ address });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred." });
     }
@@ -52,7 +51,6 @@ async function deleteHandler(
 
         return success200({ address });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred." });
     }
@@ -83,7 +81,6 @@ async function putHandler(
 
         return success200({ address });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred." });
     }

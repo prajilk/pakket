@@ -9,7 +9,6 @@ async function getHandler(req: AuthenticatedAppRequest) {
         const heroBanners = await HeroBanner.find({ disabled: false });
         return success200({ result: heroBanners });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }

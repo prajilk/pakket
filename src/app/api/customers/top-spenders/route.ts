@@ -43,7 +43,6 @@ async function getHandler(req: AuthenticatedRequest) {
             },
         });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred" });
     }

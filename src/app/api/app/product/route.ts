@@ -48,7 +48,6 @@ async function getHandler(req: AuthenticatedAppRequest) {
 
         return success200({ products: formattedProducts || [] });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }

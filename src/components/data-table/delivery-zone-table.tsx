@@ -54,12 +54,12 @@ export default function DeliveryZoneTable() {
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex justify-end flex-1 gap-2">
+                <div className="flex flex-wrap gap-3 items-center">
+                    <div className="flex flex-1 gap-2 justify-end">
                         <AddDeliveryZoneDialog />
                     </div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <span className="text-default-400 text-small">
                         Total {deliveryZones?.length} delivery zones
                     </span>
@@ -75,6 +75,7 @@ export default function DeliveryZoneTable() {
             classNames={{
                 wrapper: "max-h-[382px] scrollbar-none border shadow-md px-3",
             }}
+            className="col-span-3"
             topContent={topContent}
             topContentPlacement="outside"
         >

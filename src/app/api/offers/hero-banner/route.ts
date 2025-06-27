@@ -10,7 +10,6 @@ async function getHandler() {
         const heroBanners = await HeroBanner.find({});
         return success200({ result: heroBanners });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }
@@ -53,7 +52,6 @@ async function postHandler(req: NextRequest) {
 
         return success201({ result: heroBanner });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }

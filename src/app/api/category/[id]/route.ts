@@ -13,7 +13,6 @@ async function getHandler(
         if (!category) return error404("Category not found.");
         return success200({ category });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }

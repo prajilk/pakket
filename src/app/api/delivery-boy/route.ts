@@ -1,11 +1,13 @@
 import { error500, success200 } from "@/lib/response";
 import { withDbConnectAndAuth } from "@/lib/withDbConnectAndAuth";
-import Category from "@/models/categoryModel";
+import DeliveryBoy from "@/models/deliveryBoyModel";
 
 async function getHandler() {
     try {
-        const categories = await Category.find({});
-        return success200({ categories });
+        const deliveryBoy = await DeliveryBoy.find({});
+        return success200({
+            result: deliveryBoy.length > 0 ? deliveryBoy[0] : null,
+        });
     } catch (error) {
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });

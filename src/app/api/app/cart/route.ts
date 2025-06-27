@@ -87,7 +87,6 @@ async function getHandler(req: AuthenticatedAppRequest) {
 
         return success200({ cart: items, totalPrice });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }
@@ -143,7 +142,6 @@ async function postHandler(req: AuthenticatedAppRequest) {
 
         return success200({ cart: updatedCart });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }
@@ -182,7 +180,6 @@ async function patchHandler(req: AuthenticatedAppRequest) {
 
         return success200({});
     } catch (error) {
-        console.log(error);
         return error500({
             error:
                 error instanceof Error
@@ -208,7 +205,6 @@ async function deleteHandler(req: AuthenticatedAppRequest) {
 
         return success200({});
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }

@@ -25,7 +25,6 @@ async function getHandler(
 
         return success200({ product: formattedProduct });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }

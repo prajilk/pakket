@@ -64,7 +64,6 @@ async function postHandler(req: AuthenticatedAppRequest) {
             return error400("Invalid request data.");
         }
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }

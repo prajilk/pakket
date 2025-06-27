@@ -1,6 +1,6 @@
 import connectDB from "@/config/mongodb";
 import { error400, error401, error500, success200 } from "@/lib/response";
-import { sentForgotPasswordCose } from "@/lib/utils";
+import { sentForgotPasswordCode } from "@/lib/utils";
 import { ZodUserSchema } from "@/lib/zod-schema/schema";
 import User from "@/models/userModel";
 import { NextRequest } from "next/server";
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         await validUser.save();
 
         // Send OTP to user's phone number through WhatsApp.
-        const res = await sentForgotPasswordCose(
+        const res = await sentForgotPasswordCode(
             result.data.phone,
             validUser.otp
         );

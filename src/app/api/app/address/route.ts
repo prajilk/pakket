@@ -47,7 +47,6 @@ async function postHandler(req: AuthenticatedAppRequest) {
 
         return success201({ address });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred." });
     }
@@ -64,7 +63,6 @@ async function getHandler(req: AuthenticatedAppRequest) {
 
         return success200({ addresses });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred." });
     }

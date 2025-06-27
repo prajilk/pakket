@@ -1,26 +1,10 @@
 import { error500, success200 } from "@/lib/response";
 import { AuthenticatedRequest } from "@/lib/types/auth-request";
-import { findOptionById } from "@/lib/utils";
+import { findOptionById, formatAddress } from "@/lib/utils";
 import { withDbConnectAndAuth } from "@/lib/withDbConnectAndAuth";
 import Address from "@/models/addressModel";
 import Order from "@/models/orderModel";
 import Product from "@/models/productModel";
-
-function formatAddress({
-    address,
-    locality,
-    floor,
-    landmark,
-}: {
-    address: string;
-    locality: string;
-    floor?: string;
-    landmark?: string;
-}) {
-    return `${address}, ${locality}${floor ? ", Floor: " + floor : ""}${
-        landmark ? ", " + landmark : ""
-    }`;
-}
 
 async function getHandler(req: AuthenticatedRequest) {
     try {

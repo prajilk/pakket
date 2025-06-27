@@ -100,7 +100,6 @@ async function postHandler(req: AuthenticatedRequest) {
 
         return success201({});
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred" });
     }
@@ -142,7 +141,6 @@ async function getHandler(req: AuthenticatedRequest) {
             },
         });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred" });
     }
@@ -265,7 +263,6 @@ async function putHandler(req: AuthenticatedRequest) {
 
         return success200({ updatedProduct });
     } catch (error) {
-        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         return error500({ error: "An unknown error occurred" });
     }
