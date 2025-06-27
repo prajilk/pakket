@@ -36,7 +36,12 @@ async function postHandler(req: AuthenticatedAppRequest) {
             }
 
             // Step 2: Extract coordinates from the expanded URL
-            const match = longUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); // Example regex for @lat,lng format
+            let match: RegExpMatchArray | null;
+            match = longUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); // Example regex for @lat,lng format
+
+            if (!match || match.length < 3) {
+                match = longUrl.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+            }
 
             if (match && match.length >= 3) {
                 const latitude = parseFloat(match[1]);
