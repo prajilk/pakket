@@ -24,7 +24,7 @@ export async function checkIfDeliverable(lat: string, lng: string) {
         );
 
         return isDeliverable;
-    } catch (error) {
+    } catch {
         return false;
     }
 }
