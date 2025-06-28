@@ -83,7 +83,7 @@ export default function TopSpendersTable() {
                     );
                 case "sendOffer":
                     return customer.isSent ? (
-                        <div className="flex items-center justify-center">
+                        <div className="flex justify-center items-center">
                             <CheckCircle className="text-green-500 size-5" />
                         </div>
                     ) : (
@@ -102,7 +102,7 @@ export default function TopSpendersTable() {
 
     const bottomContent = React.useMemo(() => {
         return (
-            <div className="flex justify-end gap-2">
+            <div className="flex gap-2 justify-end">
                 <Button
                     disabled={page === 1}
                     size="sm"
@@ -133,15 +133,15 @@ export default function TopSpendersTable() {
                 wrapper: "max-h-[382px] scrollbar-none border shadow-md px-3",
             }}
             topContent={
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <div>
                         <h1 className="text-lg font-medium">Top Spenders</h1>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm whitespace-nowrap text-muted-foreground">
                             Top customers who spent more than ₹20,000 in one
                             week
                         </p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex gap-2 items-center">
                         <DeleteExpiredSpendersDialog />
                         <SendOffersDialog offerId={"all"}>
                             <Button size="sm" variant={"outline"}>

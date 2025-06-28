@@ -15,7 +15,7 @@ export async function checkIfDeliverable(lat: string, lng: string) {
         const postcode = address?.address?.postcode;
 
         if (!address.address || !postcode) {
-            return false;
+            return { isDeliverable: false, postcode: 0 };
         }
 
         const deliveryZones = await DeliveryZone.find({});
@@ -23,8 +23,27 @@ export async function checkIfDeliverable(lat: string, lng: string) {
             (zone) => zone.postcode === postcode
         );
 
-        return isDeliverable;
+        return { isDeliverable, postcode };
     } catch {
-        return false;
+        return { isDeliverable: false, postcode: 0 };
     }
+}
+
+export async function getCoordinates(mapUrl: string) {
+    const response = await fetch(mapUrl, { redirect: "manual" });
+    const longUrl = response.headers.get("Location");
+
+    if (!longUrl) {
+        return null;
+    }
+
+    // Step 2: Extract coordinates from the expanded URL
+    let match: RegExpMatchArray | null;
+    match = longUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); // Example regex for @lat,lng format
+
+    if (!match || match.length < 3) {
+        match = longUrl.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
+    }
+
+    return match;
 }

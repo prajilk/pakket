@@ -7,6 +7,11 @@ const DeliveryZoneSchema = new Schema<DeliveryZoneDocument>(
             type: String,
             required: true,
         },
+        deliveryCharge: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
     },
     { versionKey: false, timestamps: true }
 );

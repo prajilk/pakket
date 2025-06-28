@@ -8,4 +8,10 @@ function createToken(payload: string | Record<string, string | boolean>) {
     return token;
 }
 
+const SECRET = process.env.DELIVERY_CONFIRM_SECRET!;
+
+export function generateDeliveryToken(orderId: string) {
+    return jwt.sign({ orderId }, SECRET, { expiresIn: "7d" });
+}
+
 export default createToken;

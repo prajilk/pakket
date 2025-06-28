@@ -5,6 +5,7 @@ export interface AddressDocument {
     user: mongoose.Types.ObjectId;
     address: string;
     locality: string;
+    postcode: string;
     lat?: number;
     lng?: number;
     mapUrl?: string;

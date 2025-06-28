@@ -275,7 +275,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
     }, [isOpen, range]);
 
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
             <span className="text-xs text-muted-foreground">
                 Showing data for,{" "}
                 {PRESETS.find((preset) => preset.name === selectedPreset)
@@ -302,7 +302,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                                 }`}</div>
                             </div>
                         </div>
-                        <div className="pl-1 -mr-2 scale-125 opacity-60">
+                        <div className="pl-1 -mr-2 opacity-60 scale-125">
                             {isOpen ? (
                                 <ChevronUpIcon width={24} />
                             ) : (
@@ -315,7 +315,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                     <div className="flex py-2">
                         <div className="flex">
                             <div className="flex flex-col">
-                                <div className="flex flex-col items-center justify-end gap-2 px-3 pb-4 lg:flex-row lg:items-start lg:pb-0">
+                                <div className="flex flex-col gap-2 justify-end items-center px-3 pb-4 lg:flex-row lg:items-start lg:pb-0">
                                     <div className="flex flex-col gap-2">
                                         <div className="flex gap-2">
                                             <DateInput
@@ -403,8 +403,8 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                             </div>
                         </div>
                         {!isSmallScreen && (
-                            <div className="flex flex-col items-end gap-1 pb-6 pl-6 pr-2">
-                                <div className="flex flex-col items-end w-full gap-1 pb-6 pl-6 pr-2">
+                            <div className="flex flex-col gap-1 items-end pr-2 pb-6 pl-6">
+                                <div className="flex flex-col gap-1 items-end pr-2 pb-6 pl-6 w-full">
                                     {PRESETS.map((preset) => (
                                         <PresetButton
                                             key={preset.name}
@@ -419,7 +419,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                             </div>
                         )}
                     </div>
-                    <div className="flex justify-end gap-2 py-2 pr-4">
+                    <div className="flex gap-2 justify-end py-2 pr-4">
                         <Button
                             onClick={() => {
                                 setIsOpen(false);

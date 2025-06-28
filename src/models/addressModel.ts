@@ -25,6 +25,10 @@ const AddressSchema = new Schema<AddressDocument>(
         mapUrl: {
             type: String,
         },
+        postcode: {
+            type: String,
+            required: true,
+        },
         floor: {
             type: String,
             default: null,

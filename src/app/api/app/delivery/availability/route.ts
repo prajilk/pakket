@@ -1,7 +1,7 @@
 import { error400, error401, error500, success200 } from "@/lib/response";
 import { AuthenticatedAppRequest } from "@/lib/types/auth-request";
 import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
-import { checkIfDeliverable } from "./helper";
+import { checkIfDeliverable, getCoordinates } from "./helper";
 
 async function postHandler(req: AuthenticatedAppRequest) {
     try {
@@ -11,7 +11,10 @@ async function postHandler(req: AuthenticatedAppRequest) {
 
         if (data.lat && data.lng) {
             //  Process for coordinates
-            const isDeliverable = await checkIfDeliverable(data.lat, data.lng);
+            const { isDeliverable } = await checkIfDeliverable(
+                data.lat,
+                data.lng
+            );
 
             if (!isDeliverable) {
                 return success200({
@@ -26,27 +29,12 @@ async function postHandler(req: AuthenticatedAppRequest) {
             });
         } else if (data.mapUrl) {
             // Step 1: Expand the shortened URL
-            const response = await fetch(data.mapUrl, { redirect: "manual" });
-            const longUrl = response.headers.get("Location");
-            // const response = await fetch(data.mapUrl); // Let it follow redirects
-            // const longUrl = response.url;
-
-            if (!longUrl) {
-                return error400("Unable to expand the URL.");
-            }
-
-            // Step 2: Extract coordinates from the expanded URL
-            let match: RegExpMatchArray | null;
-            match = longUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/); // Example regex for @lat,lng format
-
-            if (!match || match.length < 3) {
-                match = longUrl.match(/q=(-?\d+\.\d+),(-?\d+\.\d+)/);
-            }
+            const match = await getCoordinates(data.mapUrl);
 
             if (match && match.length >= 3) {
                 const latitude = parseFloat(match[1]);
                 const longitude = parseFloat(match[2]);
-                const isDeliverable = await checkIfDeliverable(
+                const { isDeliverable } = await checkIfDeliverable(
                     latitude.toString(),
                     longitude.toString()
                 );

@@ -87,7 +87,7 @@ async function getHandler(req: AuthenticatedAppRequest) {
             "orderId status"
         );
 
-        return success200({ orders: orders || [] });
+        return success200({ orders: orders.reverse() || [] });
     } catch (error) {
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });

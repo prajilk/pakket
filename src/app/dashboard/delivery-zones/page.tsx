@@ -9,7 +9,7 @@ const OffersPage = () => {
     return (
         <div className="space-y-5">
             <h1 className="text-2xl font-semibold">Delivery Zones</h1>
-            <div className="grid grid-cols-5 gap-4">
+            <div className="grid gap-4 md:grid-cols-5">
                 <Suspense fallback={<div>Loading...</div>}>
                     <ServerWrapper
                         queryFn={getDeliveryZonesServer}

@@ -15,7 +15,7 @@ import { Suspense } from "react";
 export default function Page() {
     return (
         <div className="space-y-5">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap justify-between items-center">
                 <h1 className="text-2xl font-semibold">Overview</h1>
                 <FilterSelect />
             </div>

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export async function addDeliveryZoneAction(formData: FormData) {
     try {
-        const { postcode } = Object.fromEntries(formData);
+        const { postcode, deliveryCharge } = Object.fromEntries(formData);
         if (!postcode || (postcode as string).length !== 6) {
             return { error: "Invalid postcode" };
         }
@@ -14,12 +14,14 @@ export async function addDeliveryZoneAction(formData: FormData) {
         await connectDB();
         await DeliveryZone.create({
             postcode: postcode as string,
+            deliveryCharge,
         });
 
         revalidatePath("/dashboard/delivery-zones");
 
         return { success: true };
     } catch (error) {
-        return { error: error };
+        if (error instanceof Error) return { error: error.message };
+        else return { error: "An unknown error occurred." };
     }
 }

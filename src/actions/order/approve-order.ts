@@ -1,6 +1,7 @@
 "use server";
 
 import connectDB from "@/config/mongodb";
+import { generateDeliveryToken } from "@/lib/jwt/create-token";
 import { formatAddress, sentOrderForDelivery } from "@/lib/utils";
 import Address from "@/models/addressModel";
 import DeliveryBoy from "@/models/deliveryBoyModel";
@@ -50,6 +51,8 @@ export async function approveOrderAction(id: string) {
             )
             .join("\n");
 
+        const deliveryToken = generateDeliveryToken(order.orderId);
+
         // TODO: Send ORDER_APPROVED notification to delivery person
         await sentOrderForDelivery(deliveryBoy.phone, {
             "1": order.orderId,
@@ -62,7 +65,7 @@ export async function approveOrderAction(id: string) {
             "8": productList,
             "9": direction,
             "10": order.note || "N/A",
-            "11": "?orderId=" + order.orderId,
+            "11": deliveryToken,
         });
 
         order.status = "ongoing";

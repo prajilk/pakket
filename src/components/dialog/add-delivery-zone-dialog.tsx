@@ -52,7 +52,7 @@ const AddDeliveryZoneDialog = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button size={"sm"} className="flex items-center gap-2">
+                <Button size={"sm"} className="flex gap-2 items-center">
                     <Plus />
                     Add delivery zone
                 </Button>
@@ -66,7 +66,7 @@ const AddDeliveryZoneDialog = () => {
                     action={handleSubmit}
                     className="grid gap-4 py-4"
                 >
-                    <div className="grid items-center grid-cols-4 gap-2">
+                    <div className="grid grid-cols-4 gap-2 items-center">
                         <Label htmlFor="postcode" className="text-right">
                             Postcode
                         </Label>
@@ -74,6 +74,18 @@ const AddDeliveryZoneDialog = () => {
                             placeholder="Postcode / Zip code"
                             name="postcode"
                             className="col-span-3"
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 gap-2 items-center">
+                        <Label htmlFor="deliveryCharge" className="text-right">
+                            Delivery charge
+                        </Label>
+                        <Input
+                            placeholder="Delivery charge (optional)"
+                            name="deliveryCharge"
+                            className="col-span-3"
+                            type="number"
+                            min="0"
                         />
                     </div>
                 </form>
