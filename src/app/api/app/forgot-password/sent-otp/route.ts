@@ -12,6 +12,8 @@ export async function POST(req: NextRequest) {
             phone: true,
         }).safeParse(body);
 
+        console.log(result);
+
         if (!result.success) {
             return error400("Invalid data", {
                 error: result.error.issues.map((i) => i.message),
@@ -23,6 +25,8 @@ export async function POST(req: NextRequest) {
         if (!validUser) {
             return error401("No user found with this phone number");
         }
+
+        console.log(validUser);
 
         validUser.otp = Math.floor(Math.random() * 1000000);
         validUser.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
@@ -37,6 +41,7 @@ export async function POST(req: NextRequest) {
 
         return success200({ message: "OTP sent successfully" });
     } catch (error) {
+        console.log(error);
         if (error instanceof Error) return error500({ error: error.message });
         else return error500({ error: "An unknown error occurred." });
     }
