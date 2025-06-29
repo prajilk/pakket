@@ -112,4 +112,7 @@ export const ZodOrderSchema = z.object({
     address: z.string().length(24),
     note: z.string().optional(),
     items: ZodItemsSchema.array().min(1, { message: "Add at least one item" }),
+    deliveryCharge: z
+        .number({ message: "Delivery charge must be numeric" })
+        .optional(),
 });

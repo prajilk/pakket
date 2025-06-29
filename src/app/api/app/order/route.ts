@@ -49,18 +49,18 @@ async function postHandler(req: AuthenticatedAppRequest) {
             return error400("Invalid product option ID for item: " + items[0]);
         if (items.length === 0) return error400("Invalid product ID");
 
-        const deliveryCharge = 0;
-
         const order = await Order.create({
             orderId: generateOrderId(),
             items,
             address: result.data.address,
             note: result.data.note,
             user: req.user.id,
-            totalPrice: Number((totalPrice + deliveryCharge).toFixed(2)),
+            totalPrice: Number(
+                (totalPrice + (result.data?.deliveryCharge || 0)).toFixed(2)
+            ),
             userName: user.name,
             userPhone: user.phone,
-            deliveryCharge,
+            deliveryCharge: result.data?.deliveryCharge || 0,
         });
 
         await Cart.findOneAndUpdate(
