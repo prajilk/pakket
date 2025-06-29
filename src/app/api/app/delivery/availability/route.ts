@@ -51,7 +51,10 @@ async function postHandler(req: AuthenticatedAppRequest) {
                     isDeliverable,
                 });
             } else {
-                return error400("Unable to find coordinates in the URL.");
+                return success200({
+                    message: "Unable to find coordinates in the URL.",
+                    isDeliverable: false,
+                });
             }
         } else {
             return error400("Invalid request data.");

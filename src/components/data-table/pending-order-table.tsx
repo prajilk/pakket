@@ -9,7 +9,14 @@ import {
     TableRow,
     TableCell,
 } from "@heroui/table";
-import { BadgeCheck, ChevronRight, Copy, Eye, Loader2 } from "lucide-react";
+import {
+    BadgeCheck,
+    ChevronRight,
+    Copy,
+    Eye,
+    Loader2,
+    RotateCw,
+} from "lucide-react";
 import DeleteDialog from "../dialog/delete-dialog";
 import { format } from "date-fns";
 import { Badge, badgeVariants } from "../ui/badge";
@@ -23,6 +30,8 @@ import { usePendingOrders } from "@/api-hooks/orders/get-pending-orders";
 import { Show } from "../show";
 import ApproveOrderDialog from "../dialog/approve-order-dialog";
 import { toast } from "sonner";
+import { Button as HeroButton } from "@heroui/button";
+import getQueryClient from "@/lib/query-utils/get-query-client";
 
 const statusColorMap: Record<
     string,
@@ -47,6 +56,7 @@ export const columns = [
 
 export default function PendingOrdersTable({ limit = 0, showViewAll = true }) {
     const { data: orders, isPending } = usePendingOrders(limit);
+    const queryClient = getQueryClient();
 
     function handleCopyOrder(order: PendingOrderTableDocument) {
         toast.success(order.userPhone);
@@ -177,6 +187,19 @@ Please confirm once delivered ✅
                                 </Link>
                             </Show.When>
                         </Show>
+                        <HeroButton
+                            startContent={<RotateCw className="size-4" />}
+                            size="sm"
+                            variant="bordered"
+                            className="bg-white border border-dashed rounded-md shadow-sm h-9"
+                            onPress={() =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ["orders", "pending"],
+                                })
+                            }
+                        >
+                            Refresh data
+                        </HeroButton>
                     </div>
                 </div>
             }

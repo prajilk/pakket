@@ -9,7 +9,7 @@ import {
     TableRow,
     TableCell,
 } from "@heroui/table";
-import { ChevronRight, Eye, Loader2 } from "lucide-react";
+import { ChevronRight, Eye, Loader2, RotateCw } from "lucide-react";
 import DeleteDialog from "../dialog/delete-dialog";
 import { format } from "date-fns";
 import { Badge, badgeVariants } from "../ui/badge";
@@ -20,6 +20,8 @@ import { deleteOrderAction } from "@/actions/order/delete-order";
 import UpdateStatus from "../order/update-status";
 import { useRecentOrders } from "@/api-hooks/orders/get-recent-orders";
 import { Button } from "../ui/button";
+import { Button as HeroButton } from "@heroui/button";
+import getQueryClient from "@/lib/query-utils/get-query-client";
 
 const statusColorMap: Record<
     string,
@@ -44,6 +46,7 @@ export const columns = [
 
 export default function RecentOrdersTable() {
     const { data: orders, isPending } = useRecentOrders();
+    const queryClient = getQueryClient();
 
     const renderCell = React.useCallback(
         (order: OrderTableDocument, columnKey: React.Key) => {
@@ -135,12 +138,27 @@ export default function RecentOrdersTable() {
             topContent={
                 <div className="flex items-center justify-between">
                     <h1 className="text-lg font-medium">Recent Orders</h1>
-                    <Link href="/dashboard/orders">
-                        <Button size={"sm"} variant={"outline"}>
-                            View all
-                            <ChevronRight />
-                        </Button>
-                    </Link>
+                    <div className="flex gap-2 items-center">
+                        <Link href="/dashboard/orders">
+                            <Button size={"sm"} variant={"outline"}>
+                                View all
+                                <ChevronRight />
+                            </Button>
+                        </Link>
+                        <HeroButton
+                            startContent={<RotateCw className="size-4" />}
+                            size="sm"
+                            variant="bordered"
+                            className="bg-white border border-dashed rounded-md shadow-sm h-9"
+                            onPress={() =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ["orders", "recent"],
+                                })
+                            }
+                        >
+                            Refresh data
+                        </HeroButton>
+                    </div>
                 </div>
             }
             topContentPlacement="inside"

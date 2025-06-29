@@ -16,6 +16,7 @@ import {
     Loader2,
     PlusCircle,
     SquareArrowOutUpRight,
+    Trash2,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Button as HeroButton } from "@heroui/button";
@@ -32,6 +33,9 @@ import { useAddresses } from "@/api-hooks/addresses/get-addresses";
 import { AddressDocumentExtended } from "@/lib/types/address";
 import DeleteDialog from "../dialog/delete-dialog";
 import { deleteAddressAction } from "@/actions/address/delete-address";
+import { deleteAllDeletedAddressesAction } from "@/actions/address/delete-all-deleted-address";
+import { toast } from "sonner";
+import getQueryClient from "@/lib/query-utils/get-query-client";
 
 export const columns = [
     { name: "ID", uid: "_id" },
@@ -59,6 +63,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 export default function AddressesTable() {
     const [filterValue, setFilterValue] = React.useState("");
     const [page, setPage] = React.useState(1);
+    const [loading, setLoading] = React.useState(false);
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
@@ -77,6 +82,30 @@ export default function AddressesTable() {
             Array.from(visibleColumns).includes(column.uid)
         );
     }, [visibleColumns]);
+
+    const queryClient = getQueryClient();
+
+    function handleDeleteAll() {
+        setLoading(true);
+
+        const promise = () =>
+            new Promise(async (resolve, reject) => {
+                const result = await deleteAllDeletedAddressesAction();
+                setLoading(false);
+                queryClient.invalidateQueries({
+                    queryKey: ["addresses"],
+                });
+                if (result.success) resolve(result);
+                else reject(result);
+            });
+
+        toast.promise(promise, {
+            loading: "Deleting all deleted addresses...",
+            success: () => "Deleted all deleted addresses",
+            error: ({ error }) =>
+                error ? error : "Failed to delete addresses",
+        });
+    }
 
     const renderCell = React.useCallback(
         (address: AddressDocumentExtended, columnKey: React.Key) => {
@@ -111,18 +140,6 @@ export default function AddressesTable() {
                 case "actions":
                     return (
                         <div className="flex gap-2.5 items-center justify-center">
-                            {/* <Button
-                                size="sm"
-                                variant={"ghost"}
-                                className="rounded-full size-8"
-                                asChild
-                            >
-                                <Link
-                                    href={`/dashboard/products/edit?id=${product._id}`}
-                                >
-                                    <Pencil />
-                                </Link>
-                            </Button> */}
                             <DeleteDialog
                                 id={address._id}
                                 action={deleteAddressAction}
@@ -210,16 +227,15 @@ export default function AddressesTable() {
                         </DropdownMenu>
                     </Dropdown>
                     <div className="flex justify-end flex-1 gap-2">
-                        {/* <Button
+                        <Button
                             size={"sm"}
                             className="flex items-center gap-2"
-                            asChild
+                            onClick={handleDeleteAll}
+                            disabled={loading}
                         >
-                            <Link href={"/dashboard/products/add"}>
-                                <Plus />
-                                Add product
-                            </Link>
-                        </Button> */}
+                            <Trash2 />
+                            Delete all deleted addresses
+                        </Button>
                     </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -232,6 +248,7 @@ export default function AddressesTable() {
     }, [
         filterValue,
         onSearchChange,
+        handleDeleteAll,
         data?.addresses.length,
         onClear,
         visibleColumns,

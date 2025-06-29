@@ -142,9 +142,15 @@ export default function TopSpendersTable() {
                         </p>
                     </div>
                     <div className="flex gap-2 items-center">
-                        <DeleteExpiredSpendersDialog />
+                        <DeleteExpiredSpendersDialog
+                            disabled={data?.customers?.length === 0}
+                        />
                         <SendOffersDialog offerId={"all"}>
-                            <Button size="sm" variant={"outline"}>
+                            <Button
+                                size="sm"
+                                variant={"outline"}
+                                disabled={data?.customers?.length === 0}
+                            >
                                 <Whatsapp />
                                 Send Offers to all
                             </Button>

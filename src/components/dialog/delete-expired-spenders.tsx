@@ -16,7 +16,11 @@ import LoadingButton from "../ui/loading-button";
 import getQueryClient from "@/lib/query-utils/get-query-client";
 import { deleteExpiredOfferAction } from "@/actions/offers/delete-expired-offer";
 
-const DeleteExpiredSpendersDialog = () => {
+const DeleteExpiredSpendersDialog = ({
+    disabled = false,
+}: {
+    disabled?: boolean;
+}) => {
     const [loading, setLoading] = useState(false);
     const queryClient = getQueryClient();
 
@@ -44,7 +48,11 @@ const DeleteExpiredSpendersDialog = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button size="sm" variant={"outline"} disabled={loading}>
+                <Button
+                    size="sm"
+                    variant={"outline"}
+                    disabled={loading || disabled}
+                >
                     <Trash2 className="text-red-500" />
                     Delete expired
                 </Button>
