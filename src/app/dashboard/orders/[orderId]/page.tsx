@@ -1,4 +1,5 @@
 import OrderDetailsPage from "@/components/order/order-page";
+import connectDB from "@/config/mongodb";
 import { PopulatedOrderDocument } from "@/lib/types/order";
 import Address from "@/models/addressModel";
 import Order from "@/models/orderModel";
@@ -12,6 +13,7 @@ const OrderPage = async ({
     params: Promise<{ orderId: string }>;
 }) => {
     const { orderId } = await params;
+    await connectDB();
     const order = await Order.findOne<PopulatedOrderDocument | null>({
         orderId,
     })
