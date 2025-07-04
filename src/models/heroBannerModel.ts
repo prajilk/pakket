@@ -7,6 +7,14 @@ const HeroBannerSchema = new Schema<HeroBannerDocument>(
             type: String,
             required: true,
         },
+        categoryId: {
+            type: String,
+            required: true,
+        },
+        categoryName: {
+            type: String,
+            required: true,
+        },
         banner: {
             url: {
                 type: String,
@@ -16,10 +24,6 @@ const HeroBannerSchema = new Schema<HeroBannerDocument>(
                 type: String,
                 default: null,
             },
-        },
-        route: {
-            type: String,
-            required: true,
         },
         disabled: {
             type: Boolean,

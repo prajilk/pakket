@@ -94,8 +94,8 @@ export const ZodHeroBannerSchema = z.object({
         message: "Banner name must be at least 2 characters.",
     }),
     imageUrl: z.string().optional(),
-    route: z.string().min(1, {
-        message: "Route is required.",
+    category: z.string().min(1, {
+        message: "Category is required.",
     }),
     disabled: z.boolean().default(false),
 });

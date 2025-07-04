@@ -6,10 +6,16 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import connectDB from "@/config/mongodb";
+import Category from "@/models/categoryModel";
+import { CategoryDocument } from "@/models/types/category";
 
-const CreateHeroBannerPage = () => {
+const CreateHeroBannerPage = async () => {
+    await connectDB();
+    const categories = await Category.find({ disabled: false }).lean();
+
     return (
-        <Card className="w-full max-w-xl mx-auto">
+        <Card className="mx-auto w-full max-w-xl">
             <CardHeader>
                 <CardTitle>Create New Hero banner</CardTitle>
                 <CardDescription>
@@ -17,7 +23,14 @@ const CreateHeroBannerPage = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <CreateHeroBannerForm />
+                <CreateHeroBannerForm
+                    categories={
+                        (categories.map((category) => ({
+                            ...category,
+                            _id: (category._id as object).toString(),
+                        })) as unknown as CategoryDocument[]) || []
+                    }
+                />
             </CardContent>
         </Card>
     );

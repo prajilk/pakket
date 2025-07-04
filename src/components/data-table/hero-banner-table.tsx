@@ -24,7 +24,7 @@ import getQueryClient from "@/lib/query-utils/get-query-client";
 
 export const columns = [
     { name: "BANNER", uid: "banner" },
-    { name: "ROUTE", uid: "route" },
+    { name: "CATEGORY", uid: "category" },
     { name: "DISABLED", uid: "disabled" },
     { name: "ACTIONS", uid: "actions" },
 ];
@@ -66,6 +66,12 @@ export default function HeroBannersTable() {
             const cellValue = banner[columnKey as keyof HeroBannerDocument];
 
             switch (columnKey) {
+                case "category":
+                    return (
+                        <div className="flex gap-1 items-center">
+                            <span>{banner.categoryName}</span>
+                        </div>
+                    );
                 case "banner":
                     return (
                         <img
@@ -77,7 +83,7 @@ export default function HeroBannersTable() {
                     );
                 case "disabled":
                     return (
-                        <div className="flex items-center gap-1">
+                        <div className="flex gap-1 items-center">
                             {cellValue ? (
                                 <Badge className="rounded-full">Yes</Badge>
                             ) : (
@@ -121,12 +127,12 @@ export default function HeroBannersTable() {
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap items-center gap-3">
+                <div className="flex flex-wrap gap-3 items-center">
                     <h1 className="text-xl font-medium">Hero Banners</h1>
-                    <div className="flex justify-end flex-1 gap-2">
+                    <div className="flex flex-1 gap-2 justify-end">
                         <Button
                             size={"sm"}
-                            className="flex items-center gap-2"
+                            className="flex gap-2 items-center"
                             asChild
                         >
                             <Link href={"/dashboard/offers/create-hero-banner"}>
@@ -136,7 +142,7 @@ export default function HeroBannersTable() {
                         </Button>
                     </div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <span className="text-default-400 text-small">
                         Total {banners?.length} banners
                     </span>

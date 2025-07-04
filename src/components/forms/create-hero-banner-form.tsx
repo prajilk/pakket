@@ -22,10 +22,22 @@ import { QueryClient } from "@tanstack/react-query";
 import { useHeroBannerMutation } from "@/api-hooks/offers/create-hero-banner";
 import LoadingButton from "../ui/loading-button";
 import { toast } from "sonner";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../ui/select";
+import { CategoryDocument } from "@/models/types/category";
 
 type FormValues = z.infer<typeof ZodHeroBannerSchema>;
 
-const CreateHeroBannerForm = () => {
+const CreateHeroBannerForm = ({
+    categories,
+}: {
+    categories: CategoryDocument[];
+}) => {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     const form = useForm<FormValues>({
@@ -33,7 +45,7 @@ const CreateHeroBannerForm = () => {
         defaultValues: {
             name: "",
             imageUrl: "",
-            route: "",
+            category: "",
             disabled: false,
         },
     });
@@ -103,15 +115,15 @@ const CreateHeroBannerForm = () => {
                     <FormLabel>Banner Image</FormLabel>
 
                     <div className="grid gap-4">
-                        <div className="flex flex-col items-center gap-1">
-                            <div className="relative flex items-center justify-center w-full h-10 border border-dashed rounded-md border-black/30">
+                        <div className="flex flex-col gap-1 items-center">
+                            <div className="flex relative justify-center items-center w-full h-10 rounded-md border border-dashed border-black/30">
                                 <Input
                                     type="file"
                                     accept="image/*"
                                     className="absolute inset-0 opacity-0 cursor-pointer"
                                     onChange={handleFileChange}
                                 />
-                                <div className="flex items-center gap-2">
+                                <div className="flex gap-2 items-center">
                                     <Upload className="w-4 h-4" />
                                     <span className="text-sm">
                                         Upload Image
@@ -160,8 +172,8 @@ const CreateHeroBannerForm = () => {
                                     className="object-cover size-full"
                                 />
                             ) : (
-                                <div className="flex flex-col items-center justify-center text-muted-foreground">
-                                    <ImageIcon className="w-10 h-10 mb-2" />
+                                <div className="flex flex-col justify-center items-center text-muted-foreground">
+                                    <ImageIcon className="mb-2 w-10 h-10" />
                                     <span>No image selected</span>
                                 </div>
                             )}
@@ -171,16 +183,37 @@ const CreateHeroBannerForm = () => {
 
                 <FormField
                     control={form.control}
-                    name="route"
+                    name="category"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Route</FormLabel>
-                            <FormControl>
-                                <Input placeholder="/summer-sale" {...field} />
-                            </FormControl>
+                            <FormLabel>Select a category</FormLabel>
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                            >
+                                <FormControl>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a category..." />
+                                    </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                    {categories.map((category) => (
+                                        <SelectItem
+                                            value={
+                                                category._id.toString() +
+                                                "+" +
+                                                category.name
+                                            }
+                                            key={category._id.toString()}
+                                        >
+                                            {category.name}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                             <FormDescription>
-                                The page to navigate to when the banner is
-                                clicked.
+                                The page category to navigate to when the banner
+                                is clicked.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>
@@ -191,7 +224,7 @@ const CreateHeroBannerForm = () => {
                     control={form.control}
                     name="disabled"
                     render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between p-4 border rounded-lg">
+                        <FormItem className="flex flex-row justify-between items-center p-4 rounded-lg border">
                             <div className="space-y-0.5">
                                 <FormLabel className="text-base">
                                     Disabled

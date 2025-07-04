@@ -46,7 +46,8 @@ async function postHandler(req: NextRequest) {
         const heroBanner = await HeroBanner.create({
             name: result.data.name,
             banner,
-            route: result.data.route,
+            categoryId: result.data.category.split("+")[0],
+            categoryName: result.data.category.split("+")[1],
             disabled: result.data.disabled,
         });
 
