@@ -14,23 +14,24 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { Badge } from "../ui/badge";
 import DeleteDialog from "../dialog/delete-dialog";
-import { HeroBannerDocument } from "@/models/types/hero-banner";
-import { useHeroBanners } from "@/api-hooks/offers/get-hero-banner";
 import { Switch } from "../ui/switch";
 import { toast } from "sonner";
 import getQueryClient from "@/lib/query-utils/get-query-client";
+import { BannerDocument } from "@/models/types/banner";
+import { useBanners } from "@/api-hooks/offers/get-banner";
 import { disableBannerAction } from "@/actions/offers/disable-banner";
 import { deleteBannerAction } from "@/actions/offers/delete-banner";
 
 export const columns = [
     { name: "BANNER", uid: "banner" },
-    { name: "CATEGORY", uid: "category" },
+    { name: "URL", uid: "url" },
+    { name: "TYPE", uid: "type" },
     { name: "DISABLED", uid: "disabled" },
     { name: "ACTIONS", uid: "actions" },
 ];
 
-export default function HeroBannersTable() {
-    const { data: banners, isPending } = useHeroBanners();
+export default function OtherBannersTable() {
+    const { data: banners, isPending } = useBanners();
     const [statusLoading, setStatusLoading] = useState(false);
 
     const queryClient = getQueryClient();
@@ -39,7 +40,7 @@ export default function HeroBannersTable() {
         async (value: boolean, id: string) => {
             const promise = () =>
                 new Promise(async (resolve, reject) => {
-                    const result = await disableBannerAction(id, value, true);
+                    const result = await disableBannerAction(id, value);
                     setStatusLoading(false);
                     if (result.success) resolve(result);
                     else reject(result);
@@ -49,7 +50,7 @@ export default function HeroBannersTable() {
                 loading: "Updating banner...",
                 success: () => {
                     queryClient.invalidateQueries({
-                        queryKey: ["hero-banners"],
+                        queryKey: ["banners"],
                     });
                     return `Successfully ${
                         value ? "disabled" : "enabled"
@@ -62,14 +63,14 @@ export default function HeroBannersTable() {
     );
 
     const renderCell = React.useCallback(
-        (banner: HeroBannerDocument, columnKey: React.Key) => {
-            const cellValue = banner[columnKey as keyof HeroBannerDocument];
+        (banner: BannerDocument, columnKey: React.Key) => {
+            const cellValue = banner[columnKey as keyof BannerDocument];
 
             switch (columnKey) {
-                case "category":
+                case "url":
                     return (
                         <div className="flex gap-1 items-center">
-                            <span>{banner.categoryName}</span>
+                            <span>{banner.url}</span>
                         </div>
                     );
                 case "banner":
@@ -108,14 +109,12 @@ export default function HeroBannersTable() {
                         <div className="flex gap-2.5 items-center justify-center">
                             <DeleteDialog
                                 id={banner._id}
-                                action={() =>
-                                    deleteBannerAction(banner._id, true)
-                                }
+                                action={deleteBannerAction}
                                 errorMsg="Failed to delete banner."
                                 loadingMsg="Deleting banner..."
                                 successMsg="Banner deleted successfully."
                                 title="banner"
-                                queryKey={["hero-banners"]}
+                                queryKey={["banners"]}
                             />
                         </div>
                     );
@@ -130,14 +129,14 @@ export default function HeroBannersTable() {
         return (
             <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap gap-3 items-center">
-                    <h1 className="text-xl font-medium">Hero Banners</h1>
+                    <h1 className="text-xl font-medium">Other Banners</h1>
                     <div className="flex flex-1 gap-2 justify-end">
                         <Button
                             size={"sm"}
                             className="flex gap-2 items-center"
                             asChild
                         >
-                            <Link href={"/dashboard/offers/create-hero-banner"}>
+                            <Link href={"/dashboard/offers/create-banner"}>
                                 <Plus />
                                 Add banner
                             </Link>
@@ -184,7 +183,7 @@ export default function HeroBannersTable() {
                 isLoading={isPending}
                 loadingContent={<Loader2 className="animate-spin" />}
             >
-                {(item: HeroBannerDocument) => (
+                {(item: BannerDocument) => (
                     <TableRow key={item._id}>
                         {(columnKey) => (
                             // @ts-expect-error: columnKey is of type keyof GroceryDocument

@@ -12,6 +12,8 @@ async function getHandler(req: AuthenticatedAppRequest) {
             "name phone email"
         );
 
+        if (!user) return error401("Unauthorized");
+
         return success200({ user });
     } catch (error) {
         if (error instanceof Error) return error500({ error: error.message });

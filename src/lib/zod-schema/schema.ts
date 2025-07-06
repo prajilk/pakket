@@ -100,6 +100,16 @@ export const ZodHeroBannerSchema = z.object({
     disabled: z.boolean().default(false),
 });
 
+export const ZodBannerSchema = z.object({
+    name: z.string().min(2, {
+        message: "Banner name must be at least 2 characters.",
+    }),
+    imageUrl: z.string().optional(),
+    url: z.string().url(),
+    type: z.enum(["home-banner", "checkout-banner"]),
+    disabled: z.boolean().default(false),
+});
+
 export const ZodItemsSchema = z.object({
     item: z.string().length(24),
     option: z.string().length(24),

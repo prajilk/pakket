@@ -26,7 +26,10 @@ const DeleteDialog = ({
     queryKey,
 }: {
     id: string;
-    action: (id: string) => Promise<
+    action: (
+        id: string,
+        heroBanner?: boolean
+    ) => Promise<
         | {
               success: boolean;
               error?: undefined;

@@ -1,5 +1,7 @@
 import HeroBannersTable from "@/components/data-table/hero-banner-table";
+import OtherBannersTable from "@/components/data-table/other-banners-table";
 import ServerWrapper from "@/components/server-wrapper";
+import { getBannersServer } from "@/lib/api/offers/get-banners";
 import { getHeroBannersServer } from "@/lib/api/offers/get-hero-banners";
 import { Suspense } from "react";
 
@@ -13,6 +15,15 @@ const OffersPage = () => {
                     queryKey={["hero-banners"]}
                 >
                     <HeroBannersTable />
+                </ServerWrapper>
+            </Suspense>
+            <hr />
+            <Suspense fallback={<div>Loading...</div>}>
+                <ServerWrapper
+                    queryFn={getBannersServer}
+                    queryKey={["banners"]}
+                >
+                    <OtherBannersTable />
                 </ServerWrapper>
             </Suspense>
         </div>
