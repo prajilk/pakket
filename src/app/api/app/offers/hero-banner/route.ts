@@ -7,8 +7,7 @@ async function getHandler(req: AuthenticatedAppRequest) {
     try {
         if (!req.user) return error401("Unauthorized");
         const heroBanners = await HeroBanner.find({
-            disabled: false,
-            type: "hero",
+            disabled: false
         });
         return success200({ result: heroBanners });
     } catch (error) {
