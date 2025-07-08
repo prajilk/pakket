@@ -198,7 +198,7 @@ const ProductFormContent = ({
                         <h3 className="text-lg font-medium">Thumbnail Image</h3>
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div className="space-y-4">
-                                <div className="flex items-center gap-4">
+                                <div className="flex gap-4 items-center">
                                     <Button
                                         type="button"
                                         variant="outline"
@@ -210,7 +210,7 @@ const ProductFormContent = ({
                                                 ?.click()
                                         }
                                     >
-                                        <UploadIcon className="w-4 h-4 mr-2" />
+                                        <UploadIcon className="mr-2 w-4 h-4" />
                                         Upload Image
                                     </Button>
                                     <Input
@@ -223,7 +223,7 @@ const ProductFormContent = ({
                                 </div>
 
                                 {thumbnailPreview && (
-                                    <div className="relative w-40 h-40 overflow-hidden border rounded-md">
+                                    <div className="overflow-hidden relative w-40 h-40 rounded-md border">
                                         <img
                                             src={thumbnailPreview}
                                             alt="Thumbnail preview"
@@ -233,7 +233,7 @@ const ProductFormContent = ({
                                             type="button"
                                             variant="destructive"
                                             size="icon"
-                                            className="absolute w-6 h-6 top-2 right-2"
+                                            className="absolute top-2 right-2 w-6 h-6"
                                             onClick={() => {
                                                 onRemovedCImages?.(-1, true);
                                                 setThumbnailPreview("");
@@ -282,7 +282,7 @@ const ProductFormContent = ({
                         <h3 className="text-lg font-medium">Product Images</h3>
                         <div className="grid grid-cols-1 gap-6">
                             <div className="space-y-4">
-                                <div className="flex items-center gap-4">
+                                <div className="flex gap-4 items-center">
                                     <Button
                                         type="button"
                                         variant="outline"
@@ -292,7 +292,7 @@ const ProductFormContent = ({
                                                 ?.click()
                                         }
                                     >
-                                        <UploadIcon className="w-4 h-4 mr-2" />
+                                        <UploadIcon className="mr-2 w-4 h-4" />
                                         Upload Images
                                     </Button>
                                     <Input
@@ -310,7 +310,7 @@ const ProductFormContent = ({
                                         {imagePreviews.map((preview, index) => (
                                             <div
                                                 key={index}
-                                                className="relative w-32 h-32 overflow-hidden border rounded-md"
+                                                className="overflow-hidden relative w-32 h-32 rounded-md border"
                                             >
                                                 <img
                                                     src={
@@ -324,7 +324,7 @@ const ProductFormContent = ({
                                                     type="button"
                                                     variant="destructive"
                                                     size="icon"
-                                                    className="absolute w-6 h-6 top-2 right-2"
+                                                    className="absolute top-2 right-2 w-6 h-6"
                                                     onClick={() =>
                                                         removeImagePreview(
                                                             index
@@ -359,9 +359,9 @@ const ProductFormContent = ({
                                         {imageUrls.map((url, index) => (
                                             <div
                                                 key={index}
-                                                className="flex items-center justify-between p-2 border rounded-md"
+                                                className="flex justify-between items-center p-2 rounded-md border"
                                             >
-                                                <div className="flex items-center gap-2 overflow-hidden">
+                                                <div className="flex overflow-hidden gap-2 items-center">
                                                     <ImagePlus className="w-4 h-4 shrink-0" />
                                                     <span className="text-sm truncate">
                                                         {url}
@@ -408,7 +408,7 @@ const ProductFormContent = ({
                     <Separator />
 
                     <div className="space-y-4">
-                        <div className="flex items-center justify-between">
+                        <div className="flex justify-between items-center">
                             <h3 className="text-lg font-medium">
                                 Product Options
                             </h3>
@@ -418,19 +418,25 @@ const ProductFormContent = ({
                                 size="sm"
                                 onClick={addOption}
                             >
-                                <Plus className="w-4 h-4 mr-2" />
+                                <Plus className="mr-2 w-4 h-4" />
                                 Add Option
                             </Button>
                         </div>
                     </div>
 
-                    <div className="border rounded-md">
+                    <div className="overflow-x-scroll rounded-md border">
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Option Name</TableHead>
-                                    <TableHead>Base Price</TableHead>
-                                    <TableHead>Offer Price</TableHead>
+                                    <TableHead className="min-w-[300px]">
+                                        Option Name
+                                    </TableHead>
+                                    <TableHead className="min-w-[100px]">
+                                        Base Price
+                                    </TableHead>
+                                    <TableHead className="min-w-[110px]">
+                                        Offer Price
+                                    </TableHead>
                                     <TableHead className="whitespace-nowrap">
                                         In Stock
                                     </TableHead>
@@ -521,7 +527,7 @@ const ProductFormContent = ({
                                                 control={form.control}
                                                 name={`options.${index}.inStock`}
                                                 render={({ field }) => (
-                                                    <FormItem className="flex items-center justify-center mb-0 space-y-0">
+                                                    <FormItem className="flex justify-center items-center mb-0 space-y-0">
                                                         <FormControl>
                                                             <Switch
                                                                 checked={
@@ -577,7 +583,7 @@ const ProductFormContent = ({
                     control={form.control}
                     name="disabled"
                     render={({ field }) => (
-                        <FormItem className="flex flex-row items-center justify-between p-4 border rounded-lg">
+                        <FormItem className="flex flex-row justify-between items-center p-4 rounded-lg border">
                             <div className="space-y-0.5">
                                 <FormLabel className="text-base">
                                     Disabled
@@ -596,7 +602,7 @@ const ProductFormContent = ({
                     )}
                 />
 
-                <div className="flex justify-end gap-4">
+                <div className="flex gap-4 justify-end">
                     <LoadingButton isLoading={isPending} type="submit">
                         {action === "create"
                             ? "Create Product"

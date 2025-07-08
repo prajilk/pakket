@@ -86,7 +86,7 @@ export default function ProductsTable() {
                     );
                 case "options":
                     return (
-                        <div>
+                        <div className="min-w-[300px]">
                             <ul className="grid grid-cols-4 gap-1 bg-gray-100 border">
                                 <li className="border-r p-0.5">Unit</li>
                                 <li className="border-r p-0.5">Base Price</li>
@@ -201,7 +201,7 @@ export default function ProductsTable() {
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap items-end gap-3">
+                <div className="flex flex-wrap gap-3 items-end">
                     <Input
                         isClearable
                         className="md:max-w-80"
@@ -230,7 +230,7 @@ export default function ProductsTable() {
                                 }
                                 size="sm"
                                 variant="bordered"
-                                className="bg-white border border-dashed rounded-md shadow-sm h-9"
+                                className="h-9 bg-white rounded-md border border-dashed shadow-sm"
                             >
                                 Columns
                             </HeroButton>
@@ -254,10 +254,10 @@ export default function ProductsTable() {
                             ))}
                         </DropdownMenu>
                     </Dropdown>
-                    <div className="flex justify-end flex-1 gap-2">
+                    <div className="flex flex-1 gap-2 justify-end">
                         <Button
                             size={"sm"}
-                            className="flex items-center gap-2"
+                            className="flex gap-2 items-center"
                             asChild
                         >
                             <Link href={"/dashboard/products/add"}>
@@ -267,7 +267,7 @@ export default function ProductsTable() {
                         </Button>
                     </div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <span className="text-default-400 text-small">
                         Total {data?.products.length} products
                     </span>
@@ -284,7 +284,7 @@ export default function ProductsTable() {
 
     const bottomContent = React.useMemo(() => {
         return (
-            <div className="flex justify-end gap-2">
+            <div className="flex gap-2 justify-end">
                 <Button
                     disabled={page === 1}
                     size="sm"
