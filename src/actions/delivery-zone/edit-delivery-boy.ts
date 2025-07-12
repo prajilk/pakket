@@ -4,19 +4,19 @@ import connectDB from "@/config/mongodb";
 import DeliveryBoy from "@/models/deliveryBoyModel";
 import { revalidatePath } from "next/cache";
 
-export async function addDeliveryBoyAction(formData: FormData) {
+export async function editDeliveryBoyAction(id: string, formData: FormData) {
     try {
         const { name, phone, location } = Object.fromEntries(formData);
-        if (!name || (!phone && phone.replaceAll(" ", "").length !== 10)) {
+        if (
+            !id ||
+            !name ||
+            (!phone && phone.replaceAll(" ", "").length !== 10)
+        ) {
             return { error: "Invalid data" };
         }
 
         await connectDB();
-        const isExists = await DeliveryBoy.findOne({ phone: phone as string });
-        if (isExists) {
-            return { error: "Delivery boy already exists" };
-        }
-        await DeliveryBoy.create({
+        await DeliveryBoy.findByIdAndUpdate(id, {
             name: name as string,
             phone: phone as string,
             location: location as string,

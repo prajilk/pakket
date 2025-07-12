@@ -2,7 +2,6 @@
 
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -12,10 +11,17 @@ import {
 } from "../ui/dialog";
 import { toast } from "sonner";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import LoadingButton from "../ui/loading-button";
 import getQueryClient from "@/lib/query-utils/get-query-client";
 import { approveOrderAction } from "@/actions/order/approve-order";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "../ui/select";
+import { useDeliveryBoy } from "@/api-hooks/delivery-zone/get-delivery-boy";
 
 const ApproveOrderDialog = ({
     id,
@@ -24,19 +30,24 @@ const ApproveOrderDialog = ({
     id: string;
     children: React.ReactNode;
 }) => {
+    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [boySelected, setBoySelected] = useState("");
     const queryClient = getQueryClient();
+
+    const { data: boys, isPending } = useDeliveryBoy();
 
     function handleApprove() {
         setLoading(true);
 
         const promise = () =>
             new Promise(async (resolve, reject) => {
-                const result = await approveOrderAction(id);
+                const result = await approveOrderAction(id, boySelected);
                 setLoading(false);
                 queryClient.invalidateQueries({
                     queryKey: ["orders"],
                 });
+                setOpen(false);
                 if (result.success) resolve(result);
                 else reject(result);
             });
@@ -49,7 +60,7 @@ const ApproveOrderDialog = ({
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -61,15 +72,29 @@ const ApproveOrderDialog = ({
                     whatsapp.
                 </DialogDescription>
                 <DialogFooter className="gap-2 sm:gap-0">
-                    <DialogClose asChild>
-                        <Button
-                            variant="ghost"
-                            className="bg-destructive/10 text-destructive hover:bg-destructive/30 hover:text-destructive"
-                        >
-                            Cancel
-                        </Button>
-                    </DialogClose>
-                    <LoadingButton isLoading={loading} onClick={handleApprove}>
+                    <Select
+                        onValueChange={(value) => setBoySelected(value)}
+                        value={boySelected}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {boys?.map((boy) => (
+                                <SelectItem value={boy._id} key={boy._id}>
+                                    {boy.name}{" "}
+                                    <span className="text-xs text-muted-foreground">
+                                        &#040;{boy.location}&#041;
+                                    </span>
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    <LoadingButton
+                        isLoading={loading}
+                        onClick={handleApprove}
+                        disabled={!boySelected || loading || isPending}
+                    >
                         Approve
                     </LoadingButton>
                 </DialogFooter>

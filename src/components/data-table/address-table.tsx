@@ -173,7 +173,7 @@ export default function AddressesTable() {
     const topContent = React.useMemo(() => {
         return (
             <div className="flex flex-col gap-4">
-                <div className="flex flex-wrap items-end gap-3">
+                <div className="flex flex-wrap gap-3 items-end">
                     <Input
                         isClearable
                         className="md:max-w-80"
@@ -202,7 +202,7 @@ export default function AddressesTable() {
                                 }
                                 size="sm"
                                 variant="bordered"
-                                className="bg-white border border-dashed rounded-md shadow-sm h-9"
+                                className="h-9 bg-white rounded-md border border-dashed shadow-sm"
                             >
                                 Columns
                             </HeroButton>
@@ -226,10 +226,10 @@ export default function AddressesTable() {
                             ))}
                         </DropdownMenu>
                     </Dropdown>
-                    <div className="flex justify-end flex-1 gap-2">
+                    <div className="flex flex-1 gap-2 justify-end">
                         <Button
                             size={"sm"}
-                            className="flex items-center gap-2"
+                            className="flex gap-2 items-center"
                             onClick={handleDeleteAll}
                             disabled={loading}
                         >
@@ -238,7 +238,7 @@ export default function AddressesTable() {
                         </Button>
                     </div>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <span className="text-default-400 text-small">
                         Total {data?.addresses.length} addresses
                     </span>
@@ -249,6 +249,7 @@ export default function AddressesTable() {
         filterValue,
         onSearchChange,
         handleDeleteAll,
+        loading,
         data?.addresses.length,
         onClear,
         visibleColumns,
@@ -256,7 +257,7 @@ export default function AddressesTable() {
 
     const bottomContent = React.useMemo(() => {
         return (
-            <div className="flex justify-end gap-2">
+            <div className="flex gap-2 justify-end">
                 <Button
                     disabled={page === 1}
                     size="sm"

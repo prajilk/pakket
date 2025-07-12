@@ -11,5 +11,5 @@ export async function getDeliveryBoyServer() {
         },
     });
 
-    if (data && data.result) return data.result as DeliveryBoyDocument | null;
+    if (data && data.result) return data.result as DeliveryBoyDocument[] | null;
 }

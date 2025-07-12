@@ -4,9 +4,9 @@ import DeliveryBoy from "@/models/deliveryBoyModel";
 
 async function getHandler() {
     try {
-        const deliveryBoy = await DeliveryBoy.find({});
+        const deliveryBoys = await DeliveryBoy.find({});
         return success200({
-            result: deliveryBoy.length > 0 ? deliveryBoy[0] : null,
+            result: deliveryBoys,
         });
     } catch (error) {
         if (error instanceof Error) return error500({ error: error.message });

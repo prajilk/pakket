@@ -191,7 +191,7 @@ Please confirm once delivered ✅
                             startContent={<RotateCw className="size-4" />}
                             size="sm"
                             variant="bordered"
-                            className="bg-white border border-dashed rounded-md shadow-sm h-9"
+                            className="h-9 bg-white rounded-md border border-dashed shadow-sm"
                             onPress={() =>
                                 queryClient.invalidateQueries({
                                     queryKey: ["orders", "pending"],

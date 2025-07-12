@@ -12,9 +12,18 @@ import LoadingButton from "../ui/loading-button";
 import getQueryClient from "@/lib/query-utils/get-query-client";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { addDeliveryBoyAction } from "@/actions/delivery-zone/add-delivery-boy";
+import { editDeliveryBoyAction } from "@/actions/delivery-zone/edit-delivery-boy";
 
-const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
+const EditDeliveryBoyDialog = ({
+    children,
+    ...props
+}: {
+    children: React.ReactNode;
+    id: string;
+    name: string;
+    phone: string;
+    location: string;
+}) => {
     const [loading, setLoading] = useState(false);
     const queryClient = getQueryClient();
 
@@ -30,7 +39,7 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
 
         const promise = () =>
             new Promise(async (resolve, reject) => {
-                const result = await addDeliveryBoyAction(formData);
+                const result = await editDeliveryBoyAction(props.id, formData);
                 setLoading(false);
                 queryClient.invalidateQueries({
                     queryKey: ["delivery-boy"],
@@ -40,10 +49,10 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
             });
 
         toast.promise(promise, {
-            loading: "Adding delivery boy...",
-            success: () => "Delivery boy added successfully!",
+            loading: "Updating delivery boy...",
+            success: () => "Delivery boy updated successfully!",
             error: ({ error }) =>
-                error ? error : "Failed to add delivery boy!",
+                error ? error : "Failed to updated delivery boy!",
         });
     }
 
@@ -52,10 +61,10 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Add delivery boy</DialogTitle>
+                    <DialogTitle>Update delivery boy</DialogTitle>
                 </DialogHeader>
                 <form
-                    id="add-delivery-boy-form"
+                    id="edit-delivery-boy-form"
                     action={handleSubmit}
                     className="grid gap-4 py-4"
                 >
@@ -67,6 +76,7 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
                             placeholder="Name"
                             name="name"
                             className="col-span-3"
+                            defaultValue={props.name}
                         />
                     </div>
                     <div className="flex flex-col gap-2 items-start">
@@ -77,6 +87,7 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
                             placeholder="Don't include +91"
                             name="phone"
                             className="col-span-3"
+                            defaultValue={props.phone}
                         />
                     </div>
                     <div className="flex flex-col gap-2 items-start">
@@ -87,6 +98,7 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
                             placeholder="Location"
                             name="location"
                             className="col-span-3"
+                            defaultValue={props.location}
                         />
                     </div>
                 </form>
@@ -95,9 +107,9 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
                         isLoading={loading}
                         size={"sm"}
                         type="submit"
-                        form="add-delivery-boy-form"
+                        form="edit-delivery-boy-form"
                     >
-                        Add
+                        Update
                     </LoadingButton>
                 </DialogFooter>
             </DialogContent>
@@ -105,4 +117,4 @@ const AddDeliveryBoyDialog = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-export default AddDeliveryBoyDialog;
+export default EditDeliveryBoyDialog;

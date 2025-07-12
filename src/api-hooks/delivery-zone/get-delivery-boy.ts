@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 async function getDeliveryBoy() {
     const { data } = await axios.get("/api/delivery-boy");
-    if (data && data.result) return data.result as DeliveryBoyDocument | null;
+    if (data && data.result) return data.result as DeliveryBoyDocument[] | null;
     return null;
 }
 

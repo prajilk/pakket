@@ -8,4 +8,5 @@ export interface DeliveryBoyDocument {
     _id: string;
     name: string;
     phone: string;
+    location: string;
 }

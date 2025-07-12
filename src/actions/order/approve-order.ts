@@ -10,14 +10,14 @@ import Product from "@/models/productModel";
 import { format } from "date-fns";
 import { revalidatePath } from "next/cache";
 
-export async function approveOrderAction(id: string) {
+export async function approveOrderAction(id: string, boyId: string) {
     try {
         await connectDB();
         if (!id) {
             return { error: "Missing id" };
         }
 
-        const deliveryBoy = await DeliveryBoy.findOne({});
+        const deliveryBoy = await DeliveryBoy.findById(boyId);
         if (!deliveryBoy) return { error: "Delivery boy not found" };
 
         const order = await Order.findById(id)

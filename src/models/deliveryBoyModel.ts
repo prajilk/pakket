@@ -11,6 +11,9 @@ const DeliveryBoySchema = new Schema<DeliveryBoyDocument>(
             type: String,
             required: true,
         },
+        location: {
+            type: String,
+        },
     },
     { versionKey: false, timestamps: true }
 );
