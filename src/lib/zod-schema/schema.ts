@@ -36,8 +36,9 @@ export const ZodAddressSchema = z.object({
         .url({ message: "Invalid map URL" })
         .nullable()
         .optional(),
+    pincode: z.string().min(1, { message: "Invalid pincode" }).optional(),
     floor: z.string({ message: "Floor: Expected string" }).optional(),
-    landmark: z.string({ message: "Landmark: Expected string" }).optional(),
+    landmark: z.string({ message: "Landmark: Expected string" }),
 });
 
 export const ZodItemSchema = z.object({
