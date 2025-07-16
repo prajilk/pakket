@@ -31,13 +31,17 @@ async function postHandler(req: AuthenticatedAppRequest) {
         let lng = input.lng;
 
         // Extract coordinates from mapUrl if lat/lng not provided
-        if ((!lat || !lng) && input.mapUrl) {
-            const match = await getCoordinates(input.mapUrl);
-            if (!match || match.length < 3) {
-                return error400("Unable to find coordinates in the URL.");
-            }
-            lat = parseFloat(match[1]);
-            lng = parseFloat(match[2]);
+        // if ((!lat || !lng) && input.mapUrl) {
+        //     const match = await getCoordinates(input.mapUrl);
+        //     if (!match || match.length < 3) {
+        //         return error400("Unable to find coordinates in the URL.");
+        //     }
+        //     lat = parseFloat(match[1]);
+        //     lng = parseFloat(match[2]);
+        // }
+        if ((!lat || !lng) && input.pincode) {
+            lat = 1;
+            lng = 1;
         }
 
         // Still missing lat/lng?
@@ -63,7 +67,7 @@ async function postHandler(req: AuthenticatedAppRequest) {
         const address = await Address.create({
             ...input,
             user: req.user.id,
-            postcode,
+            postcode: postcode === 0 ? input.pincode : postcode,
         });
 
         return success201({ address });
