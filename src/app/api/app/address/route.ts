@@ -9,10 +9,7 @@ import { AuthenticatedAppRequest } from "@/lib/types/auth-request";
 import { withDbConnectAndAppAuth } from "@/lib/withDbConnectAndAppAuth";
 import { ZodAddressSchema } from "@/lib/zod-schema/schema";
 import Address from "@/models/addressModel";
-import {
-    checkIfDeliverable,
-    getCoordinates,
-} from "../delivery/availability/helper";
+import { checkIfDeliverable } from "../delivery/availability/helper";
 
 async function postHandler(req: AuthenticatedAppRequest) {
     try {
