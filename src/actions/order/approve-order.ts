@@ -40,9 +40,8 @@ export async function approveOrderAction(id: string, boyId: string) {
         }
 
         if (!direction)
-            return {
-                error: "Invalid address, (mapUrl or lat/lng is not valid)",
-            };
+            direction =
+                "Direction not provided: Please contact the customer directly!";
 
         const productList = order.items
             ?.map(
