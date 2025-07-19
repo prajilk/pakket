@@ -78,8 +78,9 @@ export async function sentOrderForDelivery(
     });
     const data = await response.json();
 
-    if (data.errors) return false;
+    console.log(data);
 
+    if (data.errors) return false;
     if (data.messages && data.messages[0].message_status === "accepted") {
         return true;
     } else {
