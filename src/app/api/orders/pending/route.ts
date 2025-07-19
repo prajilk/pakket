@@ -1,3 +1,4 @@
+import { generateDeliveryToken } from "@/lib/jwt/create-token";
 import { error500, success200 } from "@/lib/response";
 import { AuthenticatedRequest } from "@/lib/types/auth-request";
 import { findOptionById, formatAddress } from "@/lib/utils";
@@ -21,6 +22,8 @@ async function getHandler(req: AuthenticatedRequest) {
             });
 
         const formattedOrders = orders.map((order) => {
+            const deliveryToken = generateDeliveryToken(order.orderId);
+
             // @ts-expect-error: Nothing
             const items = order.items.map((item) => {
                 const product = findOptionById(item.item.options, item.option);
@@ -43,6 +46,7 @@ async function getHandler(req: AuthenticatedRequest) {
                 location: `https://www.google.com/maps/dir/?api=1&destination=${order.address.lat},${order.address.lng}`,
                 totalPrice: order.totalPrice,
                 createdAt: order.createdAt,
+                deliveryToken,
             };
         });
 

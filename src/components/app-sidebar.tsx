@@ -33,6 +33,7 @@ import {
 } from "./ui/collapsible";
 import Link from "next/link";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const data = {
     menu: [
@@ -95,6 +96,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { data: session } = useSession();
+
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
@@ -164,7 +167,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                         >
                                             <Link
                                                 href={item.link}
-                                                className="flex items-center w-full gap-2"
+                                                className="flex gap-2 items-center w-full"
                                             >
                                                 {item.icon}
                                                 <span className="text-sm font-medium">
@@ -180,7 +183,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarGroup>
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={"Prajil"} />
+                <NavUser user={session?.user?.name || "Admin"} />
             </SidebarFooter>
         </Sidebar>
     );

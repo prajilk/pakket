@@ -52,6 +52,7 @@ export type PendingOrderTableDocument = {
     totalPrice: string;
     status: string;
     createdAt: string;
+    deliveryToken: string;
 };
 
 // Use Omit<> to avoid repetition and improve maintainability

@@ -17,6 +17,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
+import { signOut } from "next-auth/react";
 
 export function NavUser({ user }: { user: string }) {
     const { isMobile } = useSidebar();
@@ -89,7 +90,14 @@ export function NavUser({ user }: { user: string }) {
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator /> */}
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                signOut({
+                                    callbackUrl: "/",
+                                    redirect: true,
+                                })
+                            }
+                        >
                             <LogOutIcon />
                             Log out
                         </DropdownMenuItem>

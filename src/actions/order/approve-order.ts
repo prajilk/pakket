@@ -54,7 +54,7 @@ export async function approveOrderAction(id: string, boyId: string) {
         const deliveryToken = generateDeliveryToken(order.orderId);
 
         // TODO: Send ORDER_APPROVED notification to delivery person
-        await sentOrderForDelivery(deliveryBoy.phone, {
+        const isSent = await sentOrderForDelivery(deliveryBoy.phone, {
             "1": order.orderId,
             "2": order.userName,
             "3": order.userPhone,
@@ -68,13 +68,18 @@ export async function approveOrderAction(id: string, boyId: string) {
             "11": deliveryToken,
         });
 
-        order.status = "ongoing";
-        await order.save();
+        if (isSent) {
+            order.status = "ongoing";
+            await order.save();
+        } else {
+            return { error: "Failed to send order for delivery" };
+        }
 
         revalidatePath("/dashboard");
 
         return { success: true };
     } catch (error) {
+        console.log(error);
         if (error instanceof Error) return { error: error.message };
         else return { error: "An unknown error occurred." };
     }

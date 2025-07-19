@@ -59,7 +59,6 @@ export default function PendingOrdersTable({ limit = 0, showViewAll = true }) {
     const queryClient = getQueryClient();
 
     function handleCopyOrder(order: PendingOrderTableDocument) {
-        toast.success(order.userPhone);
         navigator.clipboard.writeText(`
 📦 *New Delivery Assigned*
 
@@ -83,6 +82,10 @@ ${order.items
 📌 *Notes:* ${order.note}
 
 Please confirm once delivered ✅
+
+Confirm Delivery: https://https://pakket.vercel.app/orders/confirm/${
+            order.deliveryToken
+        }
 `);
         toast.success("Order copied to clipboard");
     }
