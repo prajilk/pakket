@@ -159,7 +159,10 @@ export default function OrderDetailsPage({
                     <Link href="/dashboard/orders">Back to Orders</Link>
                 </Button>
                 <ApproveOrderDialog id={order._id.toString()}>
-                    <Button variant={"outline"}>
+                    <Button
+                        variant={"outline"}
+                        disabled={order.status !== "pending"}
+                    >
                         <BadgeCheck className="text-green-500" /> Approve
                     </Button>
                 </ApproveOrderDialog>

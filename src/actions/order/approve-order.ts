@@ -48,7 +48,7 @@ export async function approveOrderAction(id: string, boyId: string) {
                 (item: { quantity: number; item: { title: string } }) =>
                     `• ${item.quantity}x ${item.item.title}`
             )
-            .join("\n");
+            .join(", ");
 
         const deliveryToken = generateDeliveryToken(order.orderId);
 
