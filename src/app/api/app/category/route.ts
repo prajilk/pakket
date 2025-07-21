@@ -7,9 +7,15 @@ async function getHandler(req: AuthenticatedAppRequest) {
     try {
         if (!req.user) return error401("Unauthorized");
 
-        const category = await Category.find({ disabled: false });
+        const categories = await Category.find({ disabled: false });
 
-        return success200({ categories: category.reverse() });
+        const sortedCategories = categories.sort((a, b) => {
+            if (a.name === "All items") return -1;
+            if (b.name === "All items") return 1;
+            return 0;
+        });
+
+        return success200({ categories: sortedCategories });
     } catch (error) {
         if (error instanceof Error) {
             return error500({ error: error.message });
