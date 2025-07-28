@@ -4,6 +4,7 @@ import { sentForgotPasswordCode } from "@/lib/utils";
 import { ZodUserSchema } from "@/lib/zod-schema/schema";
 import User from "@/models/userModel";
 import { NextRequest } from "next/server";
+import { randomInt } from "crypto";
 
 export async function POST(req: NextRequest) {
     try {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
             return error401("No user found with this phone number");
         }
 
-        validUser.otp = Math.floor(Math.random() * 1000000);
+        validUser.otp = randomInt(100000, 1000000);
         validUser.otpExpires = new Date(Date.now() + 5 * 60 * 1000);
         await validUser.save();
 
