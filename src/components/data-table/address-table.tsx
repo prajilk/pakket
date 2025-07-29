@@ -17,6 +17,7 @@ import {
     PlusCircle,
     SquareArrowOutUpRight,
     Trash2,
+    TriangleAlert,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Button as HeroButton } from "@heroui/button";
@@ -36,6 +37,7 @@ import { deleteAddressAction } from "@/actions/address/delete-address";
 import { deleteAllDeletedAddressesAction } from "@/actions/address/delete-all-deleted-address";
 import { toast } from "sonner";
 import getQueryClient from "@/lib/query-utils/get-query-client";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export const columns = [
     { name: "ID", uid: "_id" },
@@ -85,7 +87,7 @@ export default function AddressesTable() {
 
     const queryClient = getQueryClient();
 
-    function handleDeleteAll() {
+    const handleDeleteAll = React.useCallback(() => {
         setLoading(true);
 
         const promise = () =>
@@ -105,7 +107,7 @@ export default function AddressesTable() {
             error: ({ error }) =>
                 error ? error : "Failed to delete addresses",
         });
-    }
+    }, []);
 
     const renderCell = React.useCallback(
         (address: AddressDocumentExtended, columnKey: React.Key) => {
@@ -128,7 +130,7 @@ export default function AddressesTable() {
                         <Badge className="rounded-full">No</Badge>
                     );
                 case "location":
-                    return (
+                    return address.location ? (
                         <Link
                             href={address.location}
                             target="_blank"
@@ -136,6 +138,15 @@ export default function AddressesTable() {
                         >
                             <SquareArrowOutUpRight className="size-4" />
                         </Link>
+                    ) : (
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <TriangleAlert className="size-5 text-muted-foreground" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Pin location is not available!
+                            </TooltipContent>
+                        </Tooltip>
                     );
                 case "actions":
                     return (

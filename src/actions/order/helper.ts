@@ -1,5 +1,6 @@
 import OfferEligibility from "@/models/offerEligibilityModel";
 import Order from "@/models/orderModel";
+import Product from "@/models/productModel";
 import { startOfWeek, endOfWeek } from "date-fns";
 import mongoose from "mongoose";
 
@@ -74,4 +75,51 @@ export async function handleOrderCancelled(user: mongoose.Types.ObjectId) {
             isSent: false, // Only delete if not sent yet
         });
     }
+}
+
+export async function handleProductPurchase(
+    items: {
+        item: mongoose.Types.ObjectId;
+        option: mongoose.Types.ObjectId;
+        quantity: number;
+        priceAtOrder: number;
+        _id: mongoose.Types.ObjectId;
+    }[],
+    opr: "increase" | "decrease" = "increase"
+) {
+    const multiplier = opr === "increase" ? 1 : -1;
+
+    // Group quantities per product
+    const quantityMap = new Map<string, number>();
+    for (const { item, quantity } of items) {
+        const key = item.toString();
+        quantityMap.set(key, (quantityMap.get(key) || 0) + quantity);
+    }
+
+    const operations = Array.from(quantityMap.entries()).map(
+        ([itemId, quantity]) => ({
+            updateOne: {
+                filter: { _id: new mongoose.Types.ObjectId(itemId) },
+                update: [
+                    {
+                        $set: {
+                            purchases: {
+                                $max: [
+                                    {
+                                        $add: [
+                                            "$purchases",
+                                            multiplier * quantity,
+                                        ],
+                                    },
+                                    0,
+                                ],
+                            },
+                        },
+                    },
+                ],
+            },
+        })
+    );
+
+    await Product.bulkWrite(operations);
 }

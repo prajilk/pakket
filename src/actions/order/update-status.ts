@@ -3,7 +3,11 @@
 import connectDB from "@/config/mongodb";
 import Order from "@/models/orderModel";
 import { revalidatePath } from "next/cache";
-import { handleOrderCancelled, handleOrderDelivered } from "./helper";
+import {
+    handleOrderCancelled,
+    handleOrderDelivered,
+    handleProductPurchase,
+} from "./helper";
 
 export async function updateStatusAction(
     id: string,
@@ -36,6 +40,14 @@ export async function updateStatusAction(
             { new: true }
         );
 
+        // Login to increase product purchases
+        if (data.status === "delivered") {
+            await handleProductPurchase(updatedOrder.items);
+        } else {
+            await handleProductPurchase(updatedOrder.items, "decrease");
+        }
+
+        // Logic to find top spender
         if (data.status === "delivered") {
             await handleOrderDelivered(updatedOrder.user);
         } else {

@@ -52,7 +52,10 @@ async function getHandler(req: AuthenticatedRequest) {
                     ...address,
                     user: address.user.name,
                     phone: address.user.phone,
-                    location: `https://www.google.com/maps/search/?api=1&query=${address.lat},${address.lng}`,
+                    location:
+                        address.lat && address.lng
+                            ? `https://www.google.com/maps/search/?api=1&query=${address.lat},${address.lng}`
+                            : null,
                 })),
                 hasMore,
             },

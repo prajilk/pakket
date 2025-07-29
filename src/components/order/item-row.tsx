@@ -39,10 +39,10 @@ const ItemRow = ({
                 </div>
             </TableCell>
             <TableCell>{unit}</TableCell>
-            <TableCell className="text-right">${priceAtOrder}</TableCell>
+            <TableCell className="text-right">₹{priceAtOrder}</TableCell>
             <TableCell className="text-right">{quantity}</TableCell>
             <TableCell className="font-medium text-right">
-                {totalPrice}
+                ₹{totalPrice}
             </TableCell>
         </TableRow>
     );

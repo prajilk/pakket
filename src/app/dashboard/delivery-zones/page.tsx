@@ -5,7 +5,7 @@ import { getDeliveryBoyServer } from "@/lib/api/delivery-zones/get-delivery-boy"
 import { getDeliveryZonesServer } from "@/lib/api/delivery-zones/get-delivery-zones";
 import { Suspense } from "react";
 
-const OffersPage = () => {
+const DeliveryZonePage = () => {
     return (
         <div className="space-y-5">
             <h1 className="text-2xl font-semibold">Delivery Zones</h1>
@@ -31,4 +31,4 @@ const OffersPage = () => {
     );
 };
 
-export default OffersPage;
+export default DeliveryZonePage;

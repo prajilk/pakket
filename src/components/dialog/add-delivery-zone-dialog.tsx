@@ -15,8 +15,13 @@ import { Plus } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { addDeliveryZoneAction } from "@/actions/delivery-zone/add-delivery-zone";
+import { DeliveryZoneDocument } from "@/models/types/delivery-zone";
 
-const AddDeliveryZoneDialog = () => {
+const AddDeliveryZoneDialog = ({
+    deliveryZones,
+}: {
+    deliveryZones: DeliveryZoneDocument[];
+}) => {
     const [loading, setLoading] = useState(false);
     const queryClient = getQueryClient();
 
@@ -24,6 +29,15 @@ const AddDeliveryZoneDialog = () => {
         setLoading(true);
 
         const data = Object.fromEntries(formData);
+
+        if (deliveryZones.find((zone) => zone.postcode === data.postcode)) {
+            toast.error(
+                "Delivery zone already exists! Please delete the existing one and try again."
+            );
+            setLoading(false);
+            return;
+        }
+
         if ((data.postcode as string)?.length !== 6) {
             toast.error("Invalid postcode.");
             setLoading(false);

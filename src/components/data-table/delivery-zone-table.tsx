@@ -18,6 +18,7 @@ import AddDeliveryZoneDialog from "../dialog/add-delivery-zone-dialog";
 
 export const columns = [
     { name: "POSTCODE", uid: "postcode" },
+    { name: "CHARGE", uid: "deliveryCharge" },
     { name: "ACTIONS", uid: "actions" },
 ];
 
@@ -30,6 +31,12 @@ export default function DeliveryZoneTable() {
                 deliveryZone[columnKey as keyof DeliveryZoneDocument];
 
             switch (columnKey) {
+                case "deliveryCharge":
+                    return (
+                        <span className="text-right">
+                            ₹{cellValue.toString()}
+                        </span>
+                    );
                 case "actions":
                     return (
                         <div className="flex gap-2.5 items-center justify-center">
@@ -56,7 +63,9 @@ export default function DeliveryZoneTable() {
             <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap gap-3 items-center">
                     <div className="flex flex-1 gap-2 justify-end">
-                        <AddDeliveryZoneDialog />
+                        <AddDeliveryZoneDialog
+                            deliveryZones={deliveryZones || []}
+                        />
                     </div>
                 </div>
                 <div className="flex justify-between items-center">
@@ -66,7 +75,7 @@ export default function DeliveryZoneTable() {
                 </div>
             </div>
         );
-    }, [deliveryZones?.length]);
+    }, [deliveryZones?.length, deliveryZones]);
 
     return (
         <Table

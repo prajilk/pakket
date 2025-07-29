@@ -3,6 +3,11 @@
 import connectDB from "@/config/mongodb";
 import Order from "@/models/orderModel";
 import jwt from "jsonwebtoken";
+import {
+    handleOrderCancelled,
+    handleOrderDelivered,
+    handleProductPurchase,
+} from "../order/helper";
 
 const SECRET = process.env.DELIVERY_CONFIRM_SECRET!;
 
@@ -25,6 +30,20 @@ export async function confirmDeliveryAction(token: string) {
                 success: true,
                 message: "Order already confirmed as delivered",
             };
+        }
+
+        // Login to increase product purchases
+        if (order.status === "delivered") {
+            await handleProductPurchase(order.items);
+        } else {
+            await handleProductPurchase(order.items, "decrease");
+        }
+
+        // Logic to find top spender
+        if (order.status === "delivered") {
+            await handleOrderDelivered(order.user);
+        } else {
+            await handleOrderCancelled(order.user);
         }
 
         order.status = "delivered";

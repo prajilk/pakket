@@ -29,7 +29,6 @@ const AddressCard = ({
     landmark,
     lat,
     lng,
-    mapUrl,
     locality,
     isDeleted,
 }: AddressCardProps) => {
@@ -64,26 +63,22 @@ const AddressCard = ({
                                 Landmark: {landmark}
                             </p>
                         )}
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            className="flex gap-1 items-center"
-                            asChild
-                        >
-                            <Link
-                                href={
-                                    lat && lng
-                                        ? `https://www.google.com/maps?q=${lat},${lng}`
-                                        : mapUrl
-                                        ? mapUrl
-                                        : ""
-                                }
-                                target="_blank"
+                        {lat && lng && (
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex gap-1 items-center"
+                                asChild
                             >
-                                <MapPin className="w-4 h-4" />
-                                View on Google Maps
-                            </Link>
-                        </Button>
+                                <Link
+                                    href={`https://www.google.com/maps?q=${lat},${lng}`}
+                                    target="_blank"
+                                >
+                                    <MapPin className="w-4 h-4" />
+                                    View on Google Maps
+                                </Link>
+                            </Button>
+                        )}
                     </div>
                 </div>
             </CardContent>
