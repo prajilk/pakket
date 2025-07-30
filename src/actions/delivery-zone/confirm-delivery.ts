@@ -32,18 +32,14 @@ export async function confirmDeliveryAction(token: string) {
             };
         }
 
-        // Login to increase product purchases
+        // Logic to increase product purchases
         if (order.status === "delivered") {
             await handleProductPurchase(order.items);
-        } else {
-            await handleProductPurchase(order.items, "decrease");
         }
 
         // Logic to find top spender
         if (order.status === "delivered") {
             await handleOrderDelivered(order.user);
-        } else {
-            await handleOrderCancelled(order.user);
         }
 
         order.status = "delivered";

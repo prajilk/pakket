@@ -34,25 +34,31 @@ export async function updateStatusAction(
             data.deliveryDate = null;
         }
 
-        const updatedOrder = await Order.findByIdAndUpdate(
-            id,
-            { $set: data },
-            { new: true }
-        );
+        const order = await Order.findById(id);
 
         // Login to increase product purchases
-        if (data.status === "delivered") {
-            await handleProductPurchase(updatedOrder.items);
-        } else {
-            await handleProductPurchase(updatedOrder.items, "decrease");
+        if (data.status === "delivered" && order.status !== "delivered") {
+            await handleProductPurchase(order.items);
+        } else if (order.status === "delivered") {
+            await handleProductPurchase(order.items, "decrease");
         }
 
         // Logic to find top spender
-        if (data.status === "delivered") {
-            await handleOrderDelivered(updatedOrder.user);
-        } else {
-            await handleOrderCancelled(updatedOrder.user);
+        if (data.status === "delivered" && order.status !== "delivered") {
+            await handleOrderDelivered(order.user);
+        } else if (order.status === "cancelled") {
+            await handleOrderCancelled(order.user);
         }
+
+        // const updatedOrder = await Order.findByIdAndUpdate(
+        //     id,
+        //     { $set: data },
+        //     { new: true }
+        // );
+
+        order.status = data.status;
+        order.deliveryDate = data.deliveryDate;
+        await order.save();
 
         revalidatePath("/dashboard/orders");
 
