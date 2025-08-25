@@ -107,7 +107,7 @@ export default function AddressesTable() {
             error: ({ error }) =>
                 error ? error : "Failed to delete addresses",
         });
-    }, []);
+    }, [queryClient]);
 
     const renderCell = React.useCallback(
         (address: AddressDocumentExtended, columnKey: React.Key) => {

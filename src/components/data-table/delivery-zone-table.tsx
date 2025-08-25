@@ -75,7 +75,7 @@ export default function DeliveryZoneTable() {
                 </div>
             </div>
         );
-    }, [deliveryZones?.length, deliveryZones]);
+    }, [deliveryZones]);
 
     return (
         <Table

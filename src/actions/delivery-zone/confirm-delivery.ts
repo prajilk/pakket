@@ -3,11 +3,7 @@
 import connectDB from "@/config/mongodb";
 import Order from "@/models/orderModel";
 import jwt from "jsonwebtoken";
-import {
-    handleOrderCancelled,
-    handleOrderDelivered,
-    handleProductPurchase,
-} from "../order/helper";
+import { handleOrderDelivered, handleProductPurchase } from "../order/helper";
 
 const SECRET = process.env.DELIVERY_CONFIRM_SECRET!;
 
@@ -32,19 +28,14 @@ export async function confirmDeliveryAction(token: string) {
             };
         }
 
-        // Logic to increase product purchases
-        if (order.status === "delivered") {
-            await handleProductPurchase(order.items);
-        }
-
-        // Logic to find top spender
-        if (order.status === "delivered") {
-            await handleOrderDelivered(order.user);
-        }
-
         order.status = "delivered";
         order.deliveryDate = new Date();
         await order.save();
+
+        // Logic to increase product purchases
+        await handleProductPurchase(order.items);
+        // Logic to find top spender
+        await handleOrderDelivered(order.user);
 
         return { success: true, message: "Delivery successfully confirmed" };
     } catch (error) {
