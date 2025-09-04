@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 function createToken(payload: string | Record<string, string | boolean>) {
     const token = jwt.sign(payload, process.env.NEXTAUTH_SECRET!, {
-        expiresIn: "365d",
+        expiresIn: "365d", // token added for 1 year
     });
 
     return token;
