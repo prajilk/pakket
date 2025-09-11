@@ -29,6 +29,7 @@ async function postHandler(req: AuthenticatedRequest) {
             disabled,
             thumbnailUrl,
             imageUrls,
+            tags,
         } = result.data;
 
         const objectId = new mongoose.Types.ObjectId();
@@ -95,6 +96,7 @@ async function postHandler(req: AuthenticatedRequest) {
             images,
             description,
             options,
+            tags,
             disabled,
         });
 

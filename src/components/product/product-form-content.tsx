@@ -424,7 +424,7 @@ const ProductFormContent = ({
                         </div>
                     </div>
 
-                    <div className="overflow-x-scroll rounded-md border">
+                    <div className="overflow-x-scroll rounded-md border scrollbar-hide">
                         <Table>
                             <TableHeader>
                                 <TableRow>

@@ -23,7 +23,7 @@ const defaultValues: Partial<ProductFormValues> = {
         {
             unit: "",
             basePrice: 0,
-            offerPrice: 0,
+            offerPrice: undefined,
             inStock: true,
         },
     ],

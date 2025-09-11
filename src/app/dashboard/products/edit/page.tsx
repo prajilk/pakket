@@ -28,7 +28,7 @@ const ProductEditPage = async ({
     if (!product) return notFound();
 
     return (
-        <Card className="w-full max-w-2xl mx-auto">
+        <Card className="mx-auto w-full max-w-2xl">
             <CardHeader>
                 <CardTitle className="text-xl leading-none">
                     Create New Product
